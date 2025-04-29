@@ -35,18 +35,31 @@ namespace Controllers
 
         private void InitCommands()
         {
-            _button.onClick.AddListener(Move);
-            _button.onClick.AddListener(DisableButton);
+            _button.onClick.AddListener(UpdateSlot);
+            
+        }
+
+        private void UpdateSlot()
+        {
+            if (_gameManager.CurrentTurn == Turn.GameOver)
+                return;
+            
+            Move();
+            UpdateButtonSprite();
+            DisableButton();
+            
+            _gameManager.onMoved.Invoke();
         }
 
         private void Move()
         {
-            if (_gameManager.CheckForWinner())
-                return;
-            _button.image.sprite = _gameManager.CurrentTurn == Turn.O ? oSprite : xSprite;
             _slot.playedTurn = _gameManager.CurrentTurn;
             _gameManager.selectedSlot = _slot;
-            _gameManager.onMoved.Invoke();
+        }
+
+        private void UpdateButtonSprite()
+        {
+            _button.image.sprite = _gameManager.CurrentTurn == Turn.O ? oSprite : xSprite;
         }
 
         private void DisableButton()

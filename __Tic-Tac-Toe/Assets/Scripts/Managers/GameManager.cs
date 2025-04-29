@@ -1,4 +1,6 @@
 using Model;
+using States;
+using States.Abstraction;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,63 +9,78 @@ namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] private TMP_Text statusText;
-        
         public UnityEvent onMoved;
         public Slot selectedSlot;
-        public Turn CurrentTurn { get; private set; }
+        public int moveCount = 0;
+        public Turn CurrentTurn { get; set; }
         private Board _board;
         private Slot[,] _slots;
         
         private const int BoardSize = 3;
-        private int _moveCount = 0;
+        
+        private IGameState _currentState;
+        [SerializeField] private UIManager uiManager;
 
         private void Awake()
         {
             Init();
+            SetState(new PlayerXTurnState());
+            uiManager.UpdateStatus($"Player{CurrentTurn}'s turn!");
+        }
+        
+        public void SetState(IGameState newState)
+        {
+            _currentState?.ExitState(this);
+            _currentState = newState;
+            _currentState.EnterState(this);
         }
 
+   
         private void Init()
         {
-            CurrentTurn = Turn.X;
+            InitCommands();
             _board = new Board();
             _slots = _board.GetBoard();
-            InitCommands();
         }
 
         private void InitCommands()
         {
-            onMoved.AddListener(UpdateBoard);
-            onMoved.AddListener(MakeTurn);
+            onMoved.AddListener(UpdateGame);
+        }
+
+        private void UpdateGame()
+        {
+            UpdateBoard();
+            UpdateGameState();
+            UpdateMovesCount();
+            UpdateStatusText();
+        }
+
+        private void UpdateStatusText()
+        {
+            if (CheckForWinner())
+                uiManager.UpdateStatus($"{selectedSlot.playedTurn} won!");
+            else if (moveCount >= 9)
+                uiManager.UpdateStatus("It's a draw!");
+            else
+                uiManager.UpdateStatus($"Player{CurrentTurn}'s turn");
         }
 
         private void UpdateBoard()
         {
             var row = selectedSlot.row;
             var column = selectedSlot.column;
-           
             _board.UpdateBoard(row, column, selectedSlot);
-            _moveCount++;
-            if (CheckForWinner())
-            {
-                statusText.text = $"{CurrentTurn} Won!";
-                GameOver();
-            }
-            else if (_moveCount == 9)
-            {
-                statusText.text = "Draw!";
-            }
-
+        }
+        
+        private void UpdateGameState()
+        {
+            _currentState.UpdateState(this);
         }
 
-        private void MakeTurn()
+        private void UpdateMovesCount()
         {
-            CurrentTurn = (Turn) ((int)CurrentTurn * -1);
-        }
-
-        private void GameOver()
-        {
-            CurrentTurn = Turn.GameOver;
+            moveCount++;
         }
 
         public bool CheckForWinner()
@@ -91,6 +108,6 @@ namespace Managers
             
             return false;
         }
-        
+
     }
 }
