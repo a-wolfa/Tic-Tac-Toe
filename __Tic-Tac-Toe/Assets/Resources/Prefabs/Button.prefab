@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 94353976482766965}
   - component: {fileID: 5992615309291409695}
   - component: {fileID: 6477733088866001325}
+  - component: {fileID: 8103203510268162950}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -67,8 +68,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 6f51ffb95c408be42a07379f17d4dbaa, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -101,8 +102,8 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_DisabledColor: {r: 1, g: 0.949481, b: 0.80700004, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -135,4 +136,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xSprite: {fileID: 21300000, guid: 802d6e8c6a04a764e9b193a37664d5fa, type: 3}
   oSprite: {fileID: 21300000, guid: 7e4183a10db68a04692e12c7d97330d3, type: 3}
-  _gameManager: {fileID: 0}
+--- !u!114 &8103203510268162950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4205684195011773615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79029451e9634ccc970fca6fc5fad496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  row: 0
+  column: 0
+  playedTurn: 0
