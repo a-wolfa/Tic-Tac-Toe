@@ -1,33 +1,45 @@
+using System;
 using Model;
 using States;
 using States.Abstraction;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
         public UnityEvent onMoved;
+        
         public Slot selectedSlot;
         public int moveCount = 0;
+        
         public Turn CurrentTurn { get; set; }
+        
         private Board _board;
         private Slot[,] _slots;
         
         private const int BoardSize = 3;
+        private const int SlotsCount = 9;
         
         private IGameState _currentState;
-        [SerializeField] private UIManager uiManager;
+        
+        [Inject] 
+        private UIManager _uiManager;
 
         private void Awake()
         {
             Init();
-            SetState(new PlayerXTurnState());
-            uiManager.UpdateStatus($"Player{CurrentTurn}'s turn!");
         }
-        
+
+        private void Start()
+        {
+            SetState(new PlayerXTurnState());
+            _uiManager.UpdateStatus($"Player{CurrentTurn}'s turn!");
+        }
+
         public void SetState(IGameState newState)
         {
             _currentState?.ExitState(this);
@@ -58,12 +70,12 @@ namespace Managers
 
         private void UpdateStatusText()
         {
-            if (CheckForWinner())
-                uiManager.UpdateStatus($"{selectedSlot.playedTurn} won!");
-            else if (moveCount >= 9)
-                uiManager.UpdateStatus("It's a draw!");
+            if (_currentState is GameOverState)
+                _uiManager.UpdateStatus($"{selectedSlot.playedTurn} won!");
+            else if (moveCount >= SlotsCount)
+                _uiManager.UpdateStatus("It's a draw!");
             else
-                uiManager.UpdateStatus($"Player{CurrentTurn}'s turn");
+                _uiManager.UpdateStatus($"Player{CurrentTurn}'s turn");
         }
 
         private void UpdateBoard()

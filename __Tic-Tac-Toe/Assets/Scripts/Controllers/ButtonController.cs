@@ -3,6 +3,7 @@ using Managers;
 using Model;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Controllers
 {
@@ -11,8 +12,8 @@ namespace Controllers
         [SerializeField] private Sprite xSprite;
         [SerializeField] private Sprite oSprite;
 
-        private GameManager _gameManager;
-        private Button _button;
+        [Inject] private GameManager _gameManager;
+        private Button _button; 
         private Slot _slot;
 
         private void Awake()
@@ -29,14 +30,12 @@ namespace Controllers
         private void InitComponents()
         {
             _button = GetComponent<Button>();
-            _gameManager = FindFirstObjectByType<GameManager>();
             _slot = GetComponent<Slot>();
         }
 
         private void InitCommands()
         {
             _button.onClick.AddListener(UpdateSlot);
-            
         }
 
         private void UpdateSlot()
