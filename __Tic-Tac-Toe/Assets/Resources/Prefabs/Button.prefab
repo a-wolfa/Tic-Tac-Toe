@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.39607847, g: 0.1764706, b: 0.6509804, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
@@ -134,8 +134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2afe32d4b6372ef4a8f0430770043ed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSprite: {fileID: 21300000, guid: c7851d40096184c4ab6c67103394c9c4, type: 3}
-  oSprite: {fileID: 21300000, guid: 3321c99105ea99e43b2c435118438b54, type: 3}
+  xSprite: {fileID: 21300000, guid: f2d33a2dc1716604ba036b3b7cfdf027, type: 3}
+  oSprite: {fileID: 21300000, guid: 7d18f307a26c1874186cab2f220a95b4, type: 3}
 --- !u!114 &8103203510268162950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,4 +150,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   row: 0
   column: 0
-  playedTurn: 0
+  playedPlayer: 0

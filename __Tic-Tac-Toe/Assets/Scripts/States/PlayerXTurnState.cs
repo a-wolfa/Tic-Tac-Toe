@@ -9,7 +9,7 @@ namespace States
     {
         public void EnterState(GameManager gameManager)
         {
-            gameManager.CurrentTurn = Turn.X;
+            gameManager.CurrentPlayer = Player.X;
         }
 
         public void UpdateState(GameManager gameManager)

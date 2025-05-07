@@ -1,6 +1,6 @@
 namespace Model
 {
-    public enum Turn
+    public enum Player
     {
         X = 1,
         GameOver = 0,

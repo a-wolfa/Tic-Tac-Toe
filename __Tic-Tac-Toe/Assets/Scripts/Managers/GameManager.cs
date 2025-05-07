@@ -1,25 +1,27 @@
-using System;
 using Model;
 using States;
 using States.Abstraction;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Zenject;
 
 namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
+        
+        private BoardModel _boardModel;
         public UnityEvent onMoved;
         
-        public Slot selectedSlot;
+        public Cell selectedCell;
         public int moveCount = 0;
+        public GameObject panel;
+        public Player CurrentPlayer { get; set; }
         
-        public Turn CurrentTurn { get; set; }
-        
-        private Board _board;
-        private Slot[,] _slots;
+        private Cell[,] _slots;
+        private Button[] _buttons;
         
         private const int BoardSize = 3;
         private const int SlotsCount = 9;
@@ -37,7 +39,7 @@ namespace Managers
         private void Start()
         {
             SetState(new PlayerXTurnState());
-            _uiManager.UpdateStatus($"Player{CurrentTurn}'s turn!");
+            _uiManager.UpdateStatus($"Player{CurrentPlayer}'s turn!");
         }
 
         public void SetState(IGameState newState)
@@ -51,13 +53,41 @@ namespace Managers
         private void Init()
         {
             InitCommands();
-            _board = new Board();
-            _slots = _board.GetBoard();
+            GetButtonBoard();
+            _boardModel = new BoardModel();
+            _boardModel.SetBoard(_slots);
+        }
+
+        private void GetButtonBoard()
+        {
+            _buttons = new Button[9];
+            _slots = new Cell[BoardSize, BoardSize];
+            for (int i = 0; i < panel.transform.childCount; i++)
+            {
+                if (panel.transform.GetChild(i).TryGetComponent<Button>(out var button))
+                {
+                    _buttons[i] = button;
+                    _slots[i / BoardSize, i % BoardSize] = button.GetComponent<Cell>();
+                    Debug.Log(_slots[i / BoardSize, i % BoardSize].playedPlayer);
+                }
+            }
         }
 
         private void InitCommands()
         {
             onMoved.AddListener(UpdateGame);
+            _uiManager.resetButton.onClick.AddListener(ResetGame);
+        }
+
+        private void RemoveCommands()
+        {
+            onMoved.RemoveListener(UpdateGame);
+            _uiManager.resetButton.onClick.RemoveListener(ResetGame);
+        }
+        
+        private void OnDestroy()
+        {
+            RemoveCommands();
         }
 
         private void UpdateGame()
@@ -71,18 +101,19 @@ namespace Managers
         private void UpdateStatusText()
         {
             if (_currentState is GameOverState)
-                _uiManager.UpdateStatus($"{selectedSlot.playedTurn} won!");
+                _uiManager.UpdateStatus($"{selectedCell.playedPlayer} won!");
             else if (moveCount >= SlotsCount)
                 _uiManager.UpdateStatus("It's a draw!");
             else
-                _uiManager.UpdateStatus($"Player{CurrentTurn}'s turn");
+                _uiManager.UpdateStatus($"Player{CurrentPlayer}'s turn");
         }
 
         private void UpdateBoard()
         {
-            var row = selectedSlot.row;
-            var column = selectedSlot.column;
-            _board.UpdateBoard(row, column, selectedSlot);
+            Debug.Log(selectedCell.playedPlayer);
+            var row = selectedCell.row;
+            var column = selectedCell.column;
+            _boardModel.SetCell(row, column, selectedCell);
         }
         
         private void UpdateGameState()
@@ -100,25 +131,57 @@ namespace Managers
             for (int i = 0; i < BoardSize; i++)
             {
                 if (_slots[i, 0] != null && 
-                    _slots[i, 0]?.playedTurn == _slots[i, 1]?.playedTurn && 
-                    _slots[i, 1]?.playedTurn == _slots[i, 2]?.playedTurn || 
+                    _slots[i, 0]?.playedPlayer == _slots[i, 1]?.playedPlayer && 
+                    _slots[i, 1]?.playedPlayer == _slots[i, 2]?.playedPlayer || 
                     _slots[0, i] != null && 
-                    _slots[0, i]?.playedTurn == _slots[1, i]?.playedTurn && 
-                    _slots[1, i]?.playedTurn == _slots[2, i]?.playedTurn)
+                    _slots[0, i]?.playedPlayer == _slots[1, i]?.playedPlayer && 
+                    _slots[1, i]?.playedPlayer == _slots[2, i]?.playedPlayer)
                 {
                     return true;
                 }
             }
             
             if (_slots[0,0] != null && 
-                _slots[0,0]?.playedTurn == _slots[1,1]?.playedTurn && 
-                _slots[1,1]?.playedTurn == _slots[2,2]?.playedTurn || 
+                _slots[0,0]?.playedPlayer == _slots[1,1]?.playedPlayer && 
+                _slots[1,1]?.playedPlayer == _slots[2,2]?.playedPlayer || 
                 _slots[0,2] != null && 
-                _slots[0,2]?.playedTurn == _slots[1,1]?.playedTurn && 
-                _slots[1,1]?.playedTurn == _slots[2,0]?.playedTurn)
+                _slots[0,2]?.playedPlayer == _slots[1,1]?.playedPlayer && 
+                _slots[1,1]?.playedPlayer == _slots[2,0]?.playedPlayer)
                 return true;
             
             return false;
+        }
+
+        private void ResetGame()
+        {
+            _boardModel.Reset();
+            ResetButtons();
+            moveCount = 0;
+            ResetCells();
+            UpdateStatusText();
+            _currentState = new PlayerXTurnState();
+            
+        }
+
+        private void ResetButtons()
+        {
+            foreach (var button in _buttons)
+            {
+                button.interactable = true;
+                button.image.sprite = null;
+            }
+        }
+
+        private void ResetCells()
+        {
+            for (int i = 0; i < BoardSize; i++)
+            {
+                for (int j = 0; j < BoardSize; j++)
+                {
+                    Debug.Log(_slots[i, j].playedPlayer);
+                    _slots[i, j].playedPlayer = Player.GameOver;
+                }
+            }
         }
 
     }

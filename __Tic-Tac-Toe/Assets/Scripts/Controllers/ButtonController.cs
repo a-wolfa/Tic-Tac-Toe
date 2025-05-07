@@ -14,7 +14,7 @@ namespace Controllers
 
         [Inject] private GameManager _gameManager;
         private Button _button; 
-        private Slot _slot;
+        private Cell _cell;
 
         private void Awake()
         {
@@ -30,7 +30,7 @@ namespace Controllers
         private void InitComponents()
         {
             _button = GetComponent<Button>();
-            _slot = GetComponent<Slot>();
+            _cell = GetComponent<Cell>();
         }
 
         private void InitCommands()
@@ -40,7 +40,7 @@ namespace Controllers
 
         private void UpdateSlot()
         {
-            if (_gameManager.CurrentTurn == Turn.GameOver)
+            if (_gameManager.CurrentPlayer == Player.GameOver)
                 return;
             
             Move();
@@ -52,13 +52,13 @@ namespace Controllers
 
         private void Move()
         {
-            _slot.playedTurn = _gameManager.CurrentTurn;
-            _gameManager.selectedSlot = _slot;
+            _cell.playedPlayer = _gameManager.CurrentPlayer;
+            _gameManager.selectedCell = _cell;
         }
 
         private void UpdateButtonSprite()
         {
-            _button.image.sprite = _gameManager.CurrentTurn == Turn.O ? oSprite : xSprite;
+            _button.image.sprite = _gameManager.CurrentPlayer == Player.O ? oSprite : xSprite;
         }
 
         private void DisableButton()

@@ -5,11 +5,11 @@ using UnityEngine.Serialization;
 
 namespace Model
 {
-    public class Slot : MonoBehaviour
+    public class Cell : MonoBehaviour
     {
         public int row;
         public int column;
 
-        public Turn playedTurn;
+        [FormerlySerializedAs("playedTurn")] public Player playedPlayer;
     }
 }
