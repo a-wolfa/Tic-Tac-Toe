@@ -55,20 +55,16 @@ namespace Managers
             InitCommands();
             GetButtonBoard();
             _boardModel = new BoardModel();
-            _boardModel.SetBoard(_slots);
         }
 
         private void GetButtonBoard()
         {
             _buttons = new Button[9];
-            _slots = new Cell[BoardSize, BoardSize];
             for (int i = 0; i < panel.transform.childCount; i++)
             {
                 if (panel.transform.GetChild(i).TryGetComponent<Button>(out var button))
                 {
                     _buttons[i] = button;
-                    _slots[i / BoardSize, i % BoardSize] = button.GetComponent<Cell>();
-                    Debug.Log(_slots[i / BoardSize, i % BoardSize].playedPlayer);
                 }
             }
         }
@@ -110,10 +106,10 @@ namespace Managers
 
         private void UpdateBoard()
         {
-            Debug.Log(selectedCell.playedPlayer);
             var row = selectedCell.row;
             var column = selectedCell.column;
             _boardModel.SetCell(row, column, selectedCell);
+            _slots = _boardModel.GetBoard();
         }
         
         private void UpdateGameState()
@@ -128,6 +124,7 @@ namespace Managers
 
         public bool CheckForWinner()
         {
+            Debug.Log(_slots[0, 0]);
             for (int i = 0; i < BoardSize; i++)
             {
                 if (_slots[i, 0] != null && 
@@ -140,47 +137,41 @@ namespace Managers
                     return true;
                 }
             }
-            
-            if (_slots[0,0] != null && 
-                _slots[0,0]?.playedPlayer == _slots[1,1]?.playedPlayer && 
-                _slots[1,1]?.playedPlayer == _slots[2,2]?.playedPlayer || 
-                _slots[0,2] != null && 
-                _slots[0,2]?.playedPlayer == _slots[1,1]?.playedPlayer && 
-                _slots[1,1]?.playedPlayer == _slots[2,0]?.playedPlayer)
+
+            if (_slots[0, 0] != null &&
+                _slots[0, 0]?.playedPlayer == _slots[1, 1]?.playedPlayer &&
+                _slots[1, 1]?.playedPlayer == _slots[2, 2]?.playedPlayer ||
+                _slots[0, 2] != null &&
+                _slots[0, 2]?.playedPlayer == _slots[1, 1]?.playedPlayer &&
+                _slots[1, 1]?.playedPlayer == _slots[2, 0]?.playedPlayer)
+            {
                 return true;
+            }
             
             return false;
         }
 
         private void ResetGame()
         {
-            _boardModel.Reset();
-            ResetButtons();
-            moveCount = 0;
-            ResetCells();
-            UpdateStatusText();
-            _currentState = new PlayerXTurnState();
+            if (moveCount <= 0)
+                return;
             
+            moveCount = 0;
+
+            _boardModel.Reset();
+            ResetCells();
+            SetState(new PlayerXTurnState());
+            UpdateStatusText();
         }
 
-        private void ResetButtons()
+        private void ResetCells()
         {
             foreach (var button in _buttons)
             {
                 button.interactable = true;
                 button.image.sprite = null;
-            }
-        }
-
-        private void ResetCells()
-        {
-            for (int i = 0; i < BoardSize; i++)
-            {
-                for (int j = 0; j < BoardSize; j++)
-                {
-                    Debug.Log(_slots[i, j].playedPlayer);
-                    _slots[i, j].playedPlayer = Player.GameOver;
-                }
+                var cell = button.GetComponent<Cell>();
+                cell.playedPlayer = Player.GameOver;
             }
         }
 

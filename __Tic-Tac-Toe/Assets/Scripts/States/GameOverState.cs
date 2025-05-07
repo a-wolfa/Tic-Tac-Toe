@@ -10,7 +10,7 @@ namespace States
         public void EnterState(GameManager gameManager)
         {
             gameManager.CurrentPlayer = Player.GameOver;
-            Debug.Log("Game Over");
+            Debug.Log("Game is Actually Over");
         }
 
         public void UpdateState(GameManager gameManager)

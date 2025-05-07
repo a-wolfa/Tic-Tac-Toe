@@ -9,11 +9,13 @@ namespace States
     {
         public void EnterState(GameManager gameManager)
         {
+            Debug.Log("Player X's Turn");
             gameManager.CurrentPlayer = Player.X;
         }
 
         public void UpdateState(GameManager gameManager)
         {
+            Debug.Log(gameManager.CheckForWinner());
             if (gameManager.CheckForWinner() || gameManager.moveCount >= 9)
                 gameManager.SetState(new GameOverState());
             else

@@ -804,7 +804,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8103203510268162950, guid: 2efbd887a9e5a214fad43a793961b3c1, type: 3}
       propertyPath: column
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -989,7 +989,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8103203510268162950, guid: 2efbd887a9e5a214fad43a793961b3c1, type: 3}
       propertyPath: column
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1202,7 +1202,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8103203510268162950, guid: 2efbd887a9e5a214fad43a793961b3c1, type: 3}
       propertyPath: column
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1312,7 +1312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8103203510268162950, guid: 2efbd887a9e5a214fad43a793961b3c1, type: 3}
       propertyPath: column
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1418,7 +1418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8103203510268162950, guid: 2efbd887a9e5a214fad43a793961b3c1, type: 3}
       propertyPath: column
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8103203510268162950, guid: 2efbd887a9e5a214fad43a793961b3c1, type: 3}
       propertyPath: gameOver.m_PersistentCalls.m_Calls.Array.size
@@ -1997,15 +1997,15 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1261259449}
-  - {fileID: 143716641}
   - {fileID: 2100929678}
-  - {fileID: 791385166}
-  - {fileID: 1677783014}
+  - {fileID: 143716641}
+  - {fileID: 1261259449}
   - {fileID: 977213549}
-  - {fileID: 997955212}
-  - {fileID: 1727602478}
+  - {fileID: 1677783014}
+  - {fileID: 791385166}
   - {fileID: 720638442}
+  - {fileID: 1727602478}
+  - {fileID: 997955212}
   - {fileID: 740424082}
   m_Father: {fileID: 187538400}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2282,7 +2282,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8103203510268162950, guid: 2efbd887a9e5a214fad43a793961b3c1, type: 3}
       propertyPath: column
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

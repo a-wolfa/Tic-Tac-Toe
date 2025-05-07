@@ -5,12 +5,12 @@ namespace Model
 {
     public class BoardModel
     {
-        private Cell[,] _cBoard;
+        private Cell[,] _cBoard = new Cell[3, 3];
 
         public void SetCell(int row, int column, Cell selectedCell)
         {
             _cBoard[row, column] = selectedCell;
-            _cBoard[row, column].playedPlayer = selectedCell.playedPlayer;
+            Debug.Log(selectedCell.playedPlayer);
         }
 
         public Cell GetCell(int row, int column)

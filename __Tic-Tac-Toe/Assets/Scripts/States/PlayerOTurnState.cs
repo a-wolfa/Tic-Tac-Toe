@@ -9,6 +9,7 @@ namespace States
     {
         public void EnterState(GameManager gameManager)
         {
+            Debug.Log("Player O's Turn");
             gameManager.CurrentPlayer = Player.O;
         }
 
