@@ -16,8 +16,8 @@ namespace States
 
             if (gameManager.PlayerXType == PlayerType.AI)
             {
-                _aiPlayer = new AIPlayer(gameManager);
-                var chosenCell = _aiPlayer.MakeMove();
+                _aiPlayer = new AIPlayer(gameManager.difficulty);
+                var chosenCell = _aiPlayer.MakeMove(gameManager);
 
                 if (chosenCell != null)
                 {

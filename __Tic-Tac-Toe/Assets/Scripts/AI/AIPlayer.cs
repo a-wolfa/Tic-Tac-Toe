@@ -1,25 +1,25 @@
+using AI.AIStrategies.Abstractions;
 using Managers;
 using Model;
 using UnityEngine;
 
 public class AIPlayer
 {
-    [SerializeField] private GameManager gameManager;
+    private readonly IAIStrategy strategy;
 
-    public AIPlayer(GameManager gameManager)
+    public AIPlayer(AIDifficulty difficulty)
     {
-        this.gameManager = gameManager;
+        strategy = difficulty switch
+        {
+            AIDifficulty.Easy => new EasyAIStrategy(),
+            AIDifficulty.Medium => new MediumAIStrategy(),
+            AIDifficulty.Hard => new HardAIStrategy(),
+            _ => throw new System.ArgumentOutOfRangeException(nameof(difficulty), difficulty, null)
+        };
     }
 
-    public Cell MakeMove()
+    public Cell MakeMove(GameManager gameManager)
     {
-        var availableMoves = gameManager.GetAvailableMoves();
-        if (availableMoves.Count > 0)
-        {
-            int randomIndex = Random.Range(0, availableMoves.Count);
-            return availableMoves[randomIndex];
-        }
-
-        return null;
+        return strategy.MakeMove(gameManager);
     }
 }

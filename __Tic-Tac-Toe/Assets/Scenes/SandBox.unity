@@ -1570,6 +1570,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ecc218c95c74748a603a8e1be0a91e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerXType: 0
+  PlayerOType: 1
+  difficulty: 2
   onMoved:
     m_PersistentCalls:
       m_Calls: []

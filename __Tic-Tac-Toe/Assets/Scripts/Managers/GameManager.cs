@@ -16,6 +16,8 @@ namespace Managers
         public PlayerType PlayerXType = PlayerType.Human;
         public PlayerType PlayerOType = PlayerType.AI;
 
+        public AIDifficulty difficulty;
+
         private BoardModel _boardModel;
         public UnityEvent onMoved;
         
