@@ -9,7 +9,7 @@ namespace States
     {
         public void EnterState(GameManager gameManager)
         {
-            gameManager.CurrentPlayer = Player.GameOver;
+            gameManager.CurrentPlayer = PlayerMove.None;
             Debug.Log("Game is Actually Over");
         }
 

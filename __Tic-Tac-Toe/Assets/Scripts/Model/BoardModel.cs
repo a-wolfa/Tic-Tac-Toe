@@ -10,7 +10,7 @@ namespace Model
         public void SetCell(int row, int column, Cell selectedCell)
         {
             _cBoard[row, column] = selectedCell;
-            Debug.Log(selectedCell.playedPlayer);
+            Debug.Log(selectedCell.playedTurn);
         }
 
         public Cell GetCell(int row, int column)

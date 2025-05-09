@@ -1,6 +1,8 @@
+using Controllers;
 using Model;
 using States;
 using States.Abstraction;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -11,14 +13,16 @@ namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
-        
+        public PlayerType PlayerXType = PlayerType.Human;
+        public PlayerType PlayerOType = PlayerType.AI;
+
         private BoardModel _boardModel;
         public UnityEvent onMoved;
         
         public Cell selectedCell;
         public int moveCount = 0;
         public GameObject panel;
-        public Player CurrentPlayer { get; set; }
+        public PlayerMove CurrentPlayer { get; set; }
         
         private Cell[,] _slots;
         private Button[] _buttons;
@@ -97,7 +101,7 @@ namespace Managers
         private void UpdateStatusText()
         {
             if (_currentState is GameOverState)
-                _uiManager.UpdateStatus($"{selectedCell.playedPlayer} won!");
+                _uiManager.UpdateStatus($"{selectedCell.playedTurn} won!");
             else if (moveCount >= SlotsCount)
                 _uiManager.UpdateStatus("It's a draw!");
             else
@@ -128,22 +132,22 @@ namespace Managers
             for (int i = 0; i < BoardSize; i++)
             {
                 if (_slots[i, 0] != null && 
-                    _slots[i, 0]?.playedPlayer == _slots[i, 1]?.playedPlayer && 
-                    _slots[i, 1]?.playedPlayer == _slots[i, 2]?.playedPlayer || 
+                    _slots[i, 0]?.playedTurn == _slots[i, 1]?.playedTurn && 
+                    _slots[i, 1]?.playedTurn == _slots[i, 2]?.playedTurn || 
                     _slots[0, i] != null && 
-                    _slots[0, i]?.playedPlayer == _slots[1, i]?.playedPlayer && 
-                    _slots[1, i]?.playedPlayer == _slots[2, i]?.playedPlayer)
+                    _slots[0, i]?.playedTurn == _slots[1, i]?.playedTurn && 
+                    _slots[1, i]?.playedTurn == _slots[2, i]?.playedTurn)
                 {
                     return true;
                 }
             }
 
             if (_slots[0, 0] != null &&
-                _slots[0, 0]?.playedPlayer == _slots[1, 1]?.playedPlayer &&
-                _slots[1, 1]?.playedPlayer == _slots[2, 2]?.playedPlayer ||
+                _slots[0, 0]?.playedTurn == _slots[1, 1]?.playedTurn &&
+                _slots[1, 1]?.playedTurn == _slots[2, 2]?.playedTurn ||
                 _slots[0, 2] != null &&
-                _slots[0, 2]?.playedPlayer == _slots[1, 1]?.playedPlayer &&
-                _slots[1, 1]?.playedPlayer == _slots[2, 0]?.playedPlayer)
+                _slots[0, 2]?.playedTurn == _slots[1, 1]?.playedTurn &&
+                _slots[1, 1]?.playedTurn == _slots[2, 0]?.playedTurn)
             {
                 return true;
             }
@@ -160,6 +164,7 @@ namespace Managers
 
             _boardModel.Reset();
             ResetCells();
+            selectedCell = null;
             SetState(new PlayerXTurnState());
             UpdateStatusText();
         }
@@ -171,8 +176,27 @@ namespace Managers
                 button.interactable = true;
                 button.image.sprite = null;
                 var cell = button.GetComponent<Cell>();
-                cell.playedPlayer = Player.GameOver;
+                cell.playedTurn = PlayerMove.None;
             }
+        }
+
+        public List<Cell> GetAvailableMoves()
+        {
+            List<Cell> availableMoves = new List<Cell>();
+            foreach (var cell in FindObjectsByType<Cell>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+            {
+                if (cell.playedTurn == PlayerMove.None)
+                {
+                    availableMoves.Add(cell);
+                }
+            }
+
+            return availableMoves;
+        }
+
+        public void MakeMove(Cell cell)
+        {
+            cell.GetComponent<ButtonController>().UpdateCell();
         }
 
     }

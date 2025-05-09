@@ -1,9 +1,9 @@
 namespace Model
 {
-    public enum Player
+    public enum PlayerMove
     {
         X = 1,
-        GameOver = 0,
+        None = 0,
         O = -1
     }
 }

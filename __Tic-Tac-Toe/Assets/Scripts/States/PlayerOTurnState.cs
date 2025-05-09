@@ -10,7 +10,17 @@ namespace States
         public void EnterState(GameManager gameManager)
         {
             Debug.Log("Player O's Turn");
-            gameManager.CurrentPlayer = Player.O;
+            gameManager.CurrentPlayer = PlayerMove.O;
+
+            if (gameManager.PlayerOType == PlayerType.AI)
+            {
+                var aiPlayer = new AIPlayer(gameManager);
+                var chosenCell = aiPlayer.MakeMove();
+                if (chosenCell != null)
+                {
+                    gameManager.MakeMove(chosenCell);
+                }
+            }
         }
 
         public void UpdateState(GameManager gameManager)

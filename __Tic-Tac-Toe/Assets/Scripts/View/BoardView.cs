@@ -41,7 +41,7 @@ namespace View
             throw new System.NotImplementedException();
         }
 
-        public void ShowWinner(Player winner)
+        public void ShowWinner(PlayerMove winner)
         {
             throw new System.NotImplementedException();
         }

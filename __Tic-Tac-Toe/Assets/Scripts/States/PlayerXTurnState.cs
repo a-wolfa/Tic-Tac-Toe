@@ -7,10 +7,23 @@ namespace States
 {
     public class PlayerXTurnState : IGameState
     {
+        private AIPlayer _aiPlayer;
+
         public void EnterState(GameManager gameManager)
         {
             Debug.Log("Player X's Turn");
-            gameManager.CurrentPlayer = Player.X;
+            gameManager.CurrentPlayer = PlayerMove.X;
+
+            if (gameManager.PlayerXType == PlayerType.AI)
+            {
+                _aiPlayer = new AIPlayer(gameManager);
+                var chosenCell = _aiPlayer.MakeMove();
+
+                if (chosenCell != null)
+                {
+                    gameManager.MakeMove(chosenCell);
+                }
+            }
         }
 
         public void UpdateState(GameManager gameManager)

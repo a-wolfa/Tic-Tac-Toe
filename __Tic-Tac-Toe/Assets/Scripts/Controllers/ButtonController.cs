@@ -35,12 +35,12 @@ namespace Controllers
 
         private void InitCommands()
         {
-            _button.onClick.AddListener(UpdateSlot);
+            _button.onClick.AddListener(UpdateCell);
         }
 
-        private void UpdateSlot()
+        public void UpdateCell()
         {
-            if (_gameManager.CurrentPlayer == Player.GameOver)
+            if (_gameManager.CurrentPlayer == PlayerMove.None)
                 return;
             
             Move();
@@ -52,13 +52,13 @@ namespace Controllers
 
         private void Move()
         {
-            _cell.playedPlayer = _gameManager.CurrentPlayer;
+            _cell.playedTurn = _gameManager.CurrentPlayer;
             _gameManager.selectedCell = _cell;
         }
 
         private void UpdateButtonSprite()
         {
-            _button.image.sprite = _gameManager.CurrentPlayer == Player.O ? oSprite : xSprite;
+            _button.image.sprite = _gameManager.CurrentPlayer == PlayerMove.O ? oSprite : xSprite;
         }
 
         private void DisableButton()
