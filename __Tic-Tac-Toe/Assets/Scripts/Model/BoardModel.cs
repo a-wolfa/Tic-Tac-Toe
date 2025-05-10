@@ -7,6 +7,11 @@ namespace Model
     {
         private Cell[,] _cBoard = new Cell[3, 3];
 
+        public BoardModel(Cell[,] slots)
+        {
+            _cBoard = slots;
+        }
+
         public void SetCell(int row, int column, Cell selectedCell)
         {
             _cBoard[row, column] = selectedCell;
@@ -26,11 +31,6 @@ namespace Model
         public Cell[,] GetBoard()
         {
             return _cBoard;
-        }
-
-        public void Reset()
-        {
-            _cBoard = new Cell[3,3];
         }
     }
 }

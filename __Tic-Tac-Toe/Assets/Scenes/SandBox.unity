@@ -1572,7 +1572,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerXType: 0
   PlayerOType: 1
-  difficulty: 2
+  difficulty: 1
   onMoved:
     m_PersistentCalls:
       m_Calls: []

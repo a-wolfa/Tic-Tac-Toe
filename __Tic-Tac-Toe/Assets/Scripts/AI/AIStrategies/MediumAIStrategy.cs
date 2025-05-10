@@ -10,9 +10,10 @@ public class MediumAIStrategy : IAIStrategy
         foreach (var move in gameManager.GetAvailableMoves())
         {
             move.playedTurn = gameManager.CurrentPlayer == PlayerMove.X ? PlayerMove.O : PlayerMove.X;
-
+            
             if (gameManager.CheckForWinner())
             {
+                Debug.Log("There is win situation");
                 move.playedTurn = PlayerMove.None;
                 return move;
             }

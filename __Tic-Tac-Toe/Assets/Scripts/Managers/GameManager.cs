@@ -58,9 +58,11 @@ namespace Managers
    
         private void Init()
         {
+            _slots = new Cell[BoardSize, BoardSize];
+            _boardModel = new BoardModel(_slots);
+         
             InitCommands();
             GetButtonBoard();
-            _boardModel = new BoardModel();
         }
 
         private void GetButtonBoard()
@@ -68,10 +70,14 @@ namespace Managers
             _buttons = new Button[9];
             for (int i = 0; i < panel.transform.childCount; i++)
             {
-                if (panel.transform.GetChild(i).TryGetComponent<Button>(out var button))
-                {
-                    _buttons[i] = button;
-                }
+                Button button = panel.transform.GetChild(i).GetComponent<Button>();
+                if (!button)
+                    return;
+
+                _buttons[i] = button;
+                _slots[i / BoardSize, i % BoardSize] = button.GetComponent<Cell>();
+                var cell = _slots[i / BoardSize, i % BoardSize];
+                Debug.Log(cell.row + " " + cell.column);
             }
         }
 
@@ -133,10 +139,10 @@ namespace Managers
             Debug.Log(_slots[0, 0]);
             for (int i = 0; i < BoardSize; i++)
             {
-                if (_slots[i, 0] != null && 
+                if (_slots[i, 0].playedTurn != PlayerMove.None && 
                     _slots[i, 0]?.playedTurn == _slots[i, 1]?.playedTurn && 
                     _slots[i, 1]?.playedTurn == _slots[i, 2]?.playedTurn || 
-                    _slots[0, i] != null && 
+                    _slots[0, i].playedTurn != PlayerMove.None && 
                     _slots[0, i]?.playedTurn == _slots[1, i]?.playedTurn && 
                     _slots[1, i]?.playedTurn == _slots[2, i]?.playedTurn)
                 {
@@ -144,10 +150,10 @@ namespace Managers
                 }
             }
 
-            if (_slots[0, 0] != null &&
+            if (_slots[0, 0].playedTurn != PlayerMove.None &&
                 _slots[0, 0]?.playedTurn == _slots[1, 1]?.playedTurn &&
                 _slots[1, 1]?.playedTurn == _slots[2, 2]?.playedTurn ||
-                _slots[0, 2] != null &&
+                _slots[0, 2].playedTurn != PlayerMove.None &&
                 _slots[0, 2]?.playedTurn == _slots[1, 1]?.playedTurn &&
                 _slots[1, 1]?.playedTurn == _slots[2, 0]?.playedTurn)
             {
@@ -164,7 +170,6 @@ namespace Managers
             
             moveCount = 0;
 
-            _boardModel.Reset();
             ResetCells();
             selectedCell = null;
             SetState(new PlayerXTurnState());
@@ -185,8 +190,9 @@ namespace Managers
         public List<Cell> GetAvailableMoves()
         {
             List<Cell> availableMoves = new List<Cell>();
-            foreach (var cell in FindObjectsByType<Cell>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+            foreach (var cell in _slots)
             {
+                Debug.Log(cell);
                 if (cell.playedTurn == PlayerMove.None)
                 {
                     availableMoves.Add(cell);
