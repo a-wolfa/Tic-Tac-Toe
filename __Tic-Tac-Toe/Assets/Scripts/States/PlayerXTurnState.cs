@@ -21,7 +21,7 @@ namespace States
 
                 if (chosenCell != null)
                 {
-                    gameManager.MakeMove(chosenCell);
+                    gameManager.MakeMoveWithDelay(chosenCell, .7f);
                 }
             }
         }

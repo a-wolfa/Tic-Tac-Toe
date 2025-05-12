@@ -120,11 +120,11 @@ namespace Managers
         private void UpdateStatusText()
         {
             if (_currentState is GameOverState)
-                _uiManager.UpdateStatus($"{selectedCell.playedTurn} won!");
+                _uiManager.UpdateStatus($"{selectedCell.playedTurn} Won!");
             else if (moveCount >= SlotsCount)
-                _uiManager.UpdateStatus("It's a draw!");
+                _uiManager.UpdateStatus("Draw!");
             else
-                _uiManager.UpdateStatus($"Player{CurrentPlayer}'s turn");
+                _uiManager.UpdateStatus($"Player {CurrentPlayer}");
         }
 
         private void UpdateBoard()
@@ -159,7 +159,6 @@ namespace Managers
                     _slots[i, 0].playedTurn == _slots[i, 1].playedTurn &&
                     _slots[i, 1].playedTurn == _slots[i, 2].playedTurn)
                 {
-                    Debug.Log("Row " + i);
                     return new List<Cell> { _slots[i, 0], _slots[i, 1], _slots[i, 2] };
                 }
             }
@@ -236,15 +235,21 @@ namespace Managers
             return availableMoves;
         }
 
-        public void MakeMove(Cell cell)
+        private void MakeMove(Cell cell)
         {
-
             cell.GetComponent<ButtonController>().UpdateCell();
         }
 
-        public IEnumerator Delay()
+        private IEnumerator DelayMove(Cell cell, float delaySeconds)
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(delaySeconds);
+            MakeMove(cell);
+        }
+
+        public void MakeMoveWithDelay(Cell cell, float delaySeconds)
+        {
+            UpdateStatusText();
+            StartCoroutine(DelayMove(cell, delaySeconds));
         }
 
         private void OnWinnerFound()

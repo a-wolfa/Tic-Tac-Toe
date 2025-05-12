@@ -18,7 +18,7 @@ namespace States
                 var chosenCell = aiPlayer.MakeMove(gameManager);
                 if (chosenCell != null)
                 {
-                    gameManager.MakeMove(chosenCell);
+                    gameManager.MakeMoveWithDelay(chosenCell, .7f);
                 }
             }
         }
