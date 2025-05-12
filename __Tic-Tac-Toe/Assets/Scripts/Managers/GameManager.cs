@@ -1,4 +1,5 @@
 using Controllers;
+using Line;
 using Model;
 using States;
 using States.Abstraction;
@@ -17,28 +18,34 @@ namespace Managers
         public PlayerType PlayerXType = PlayerType.Human;
         public PlayerType PlayerOType = PlayerType.AI;
 
+        public UnityEvent WinnerFound;
+
         public AIDifficulty difficulty;
 
         private BoardModel _boardModel;
         public UnityEvent onMoved;
-        
+
         public Cell selectedCell;
         public int moveCount = 0;
         public GameObject panel;
         public PlayerMove CurrentPlayer { get; set; }
-        
+
         private Cell[,] _slots;
         private Button[] _buttons;
-        
+
         private const int BoardSize = 3;
         private const int SlotsCount = 9;
-        
+
         private IGameState _currentState;
-        
-        [Inject] 
+
+        [Inject]
         private UIManager _uiManager;
 
         [SerializeField] private ViewManager viewManager;
+        [SerializeField] private LineRendererController lineRendererController;
+
+        public Color playerXColor;
+        public Color playerOColor;
 
         private void Awake()
         {
@@ -58,12 +65,12 @@ namespace Managers
             _currentState.EnterState(this);
         }
 
-   
+
         private void Init()
         {
             _slots = new Cell[BoardSize, BoardSize];
             _boardModel = new BoardModel(_slots);
-         
+
             InitCommands();
             GetButtonBoard();
         }
@@ -87,6 +94,7 @@ namespace Managers
         private void InitCommands()
         {
             onMoved.AddListener(UpdateGame);
+            WinnerFound.AddListener(OnWinnerFound);
             _uiManager.resetButton.onClick.AddListener(ResetGame);
         }
 
@@ -95,7 +103,7 @@ namespace Managers
             onMoved.RemoveListener(UpdateGame);
             _uiManager.resetButton.onClick.RemoveListener(ResetGame);
         }
-        
+
         private void OnDestroy()
         {
             RemoveCommands();
@@ -126,7 +134,7 @@ namespace Managers
             _boardModel.SetCell(row, column, selectedCell);
             _slots = _boardModel.GetBoard();
         }
-        
+
         private void UpdateGameState()
         {
             _currentState.UpdateState(this);
@@ -139,44 +147,67 @@ namespace Managers
 
         public bool CheckForWinner()
         {
-            Debug.Log(_slots[0, 0]);
+            return GetWinningCells() != null;
+        }
+
+        public List<Cell> GetWinningCells()
+        {
+            // Rows
             for (int i = 0; i < BoardSize; i++)
             {
-                if (_slots[i, 0].playedTurn != PlayerMove.None && 
-                    _slots[i, 0]?.playedTurn == _slots[i, 1]?.playedTurn && 
-                    _slots[i, 1]?.playedTurn == _slots[i, 2]?.playedTurn || 
-                    _slots[0, i].playedTurn != PlayerMove.None && 
-                    _slots[0, i]?.playedTurn == _slots[1, i]?.playedTurn && 
-                    _slots[1, i]?.playedTurn == _slots[2, i]?.playedTurn)
+                if (_slots[i, 0].playedTurn != PlayerMove.None &&
+                    _slots[i, 0].playedTurn == _slots[i, 1].playedTurn &&
+                    _slots[i, 1].playedTurn == _slots[i, 2].playedTurn)
                 {
-                    return true;
+                    Debug.Log("Row " + i);
+                    return new List<Cell> { _slots[i, 0], _slots[i, 1], _slots[i, 2] };
                 }
             }
 
-            if (_slots[0, 0].playedTurn != PlayerMove.None &&
-                _slots[0, 0]?.playedTurn == _slots[1, 1]?.playedTurn &&
-                _slots[1, 1]?.playedTurn == _slots[2, 2]?.playedTurn ||
-                _slots[0, 2].playedTurn != PlayerMove.None &&
-                _slots[0, 2]?.playedTurn == _slots[1, 1]?.playedTurn &&
-                _slots[1, 1]?.playedTurn == _slots[2, 0]?.playedTurn)
+            // Columns
+            for (int i = 0; i < BoardSize; i++)
             {
-                return true;
+                if (_slots[0, i].playedTurn != PlayerMove.None &&
+                    _slots[0, i].playedTurn == _slots[1, i].playedTurn &&
+                    _slots[1, i].playedTurn == _slots[2, i].playedTurn)
+                {
+                    return new List<Cell> { _slots[0, i], _slots[1, i], _slots[2, i] };
+                }
             }
-            
-            return false;
+
+            // Diagonal
+            if (_slots[0, 0].playedTurn != PlayerMove.None &&
+                _slots[0, 0].playedTurn == _slots[1, 1].playedTurn &&
+                _slots[1, 1].playedTurn == _slots[2, 2].playedTurn)
+            {
+                return new List<Cell> { _slots[0, 0], _slots[1, 1], _slots[2, 2] };
+            }
+
+            // Anti-diagonal
+            if (_slots[0, 2].playedTurn != PlayerMove.None &&
+                _slots[0, 2].playedTurn == _slots[1, 1].playedTurn &&
+                _slots[1, 1].playedTurn == _slots[2, 0].playedTurn)
+            {
+                return new List<Cell> { _slots[0, 2], _slots[1, 1], _slots[2, 0] };
+            }
+
+            return null;
         }
+
+
 
         private void ResetGame()
         {
             if (moveCount <= 0)
                 return;
-            
+
             moveCount = 0;
 
             ResetCells();
             selectedCell = null;
             SetState(new PlayerXTurnState());
             UpdateStatusText();
+            lineRendererController.EraseLine();
         }
 
         private void ResetCells()
@@ -207,7 +238,7 @@ namespace Managers
 
         public void MakeMove(Cell cell)
         {
-            
+
             cell.GetComponent<ButtonController>().UpdateCell();
         }
 
@@ -216,5 +247,20 @@ namespace Managers
             yield return new WaitForSeconds(3f);
         }
 
+        private void OnWinnerFound()
+        {
+            var winningCells = GetWinningCells();
+            Debug.Log(winningCells.Count);
+            if (winningCells != null)
+            {
+                lineRendererController.SetCompleteLine(winningCells[0].transform.position, winningCells[2].transform.position);
+
+                var color = CurrentPlayer.Equals(PlayerMove.X) ? playerXColor : playerOColor;
+                lineRendererController.ColorLine(color);
+            }
+
+        }
+
+        
     }
 }
