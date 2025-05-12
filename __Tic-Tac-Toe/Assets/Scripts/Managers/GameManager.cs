@@ -2,6 +2,7 @@ using Controllers;
 using Model;
 using States;
 using States.Abstraction;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -36,6 +37,8 @@ namespace Managers
         
         [Inject] 
         private UIManager _uiManager;
+
+        [SerializeField] private ViewManager viewManager;
 
         private void Awake()
         {
@@ -204,7 +207,13 @@ namespace Managers
 
         public void MakeMove(Cell cell)
         {
+            
             cell.GetComponent<ButtonController>().UpdateCell();
+        }
+
+        public IEnumerator Delay()
+        {
+            yield return new WaitForSeconds(3f);
         }
 
     }

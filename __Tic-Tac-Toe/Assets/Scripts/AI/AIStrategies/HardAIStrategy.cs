@@ -9,6 +9,9 @@ public class HardAIStrategy : IAIStrategy
 {
     public Cell MakeMove(GameManager gameManager)
     {
+        if (gameManager.moveCount < 2)
+            return new EasyAIStrategy().MakeMove(gameManager);
+
         var bestMove = MiniMax(gameManager.GetAvailableMoves(), true, gameManager);
         return bestMove.cell;
     }
