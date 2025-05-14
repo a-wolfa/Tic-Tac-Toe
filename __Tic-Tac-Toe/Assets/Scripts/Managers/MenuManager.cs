@@ -36,7 +36,7 @@ public class MenuManager : MonoBehaviour
 
     private void OnPlayerClicked(PlayerType playerType)
     {
-        gameManager.PlayerOType = playerType;
+        gameManager.playerOType = playerType;
         viewManager.UnLoadScene("Menu");
     }
 }

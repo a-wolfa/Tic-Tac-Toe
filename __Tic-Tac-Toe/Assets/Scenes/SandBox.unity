@@ -1505,7 +1505,7 @@ GameObject:
   - component: {fileID: 1128338095}
   - component: {fileID: 1128338096}
   m_Layer: 0
-  m_Name: ViewManager
+  m_Name: View Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1766,7 +1766,7 @@ GameObject:
   - component: {fileID: 1315365642}
   - component: {fileID: 1315365641}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Game Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1784,12 +1784,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ecc218c95c74748a603a8e1be0a91e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerXType: 0
-  PlayerOType: 1
-  WinnerFound:
+  playerXType: 0
+  playerOType: 1
+  difficulty: 1
+  onGameOver:
     m_PersistentCalls:
       m_Calls: []
-  difficulty: 1
   onMoved:
     m_PersistentCalls:
       m_Calls: []
@@ -2028,8 +2028,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 734016413a07cdf4993a30072b34713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1315365641}
-  uiManager: {fileID: 1707894526}
 --- !u!224 &1677783014 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1872039089097915664, guid: 2efbd887a9e5a214fad43a793961b3c1, type: 3}
@@ -2046,7 +2044,7 @@ GameObject:
   - component: {fileID: 1707894525}
   - component: {fileID: 1707894526}
   m_Layer: 0
-  m_Name: UiManager
+  m_Name: UI Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2080,6 +2078,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statusText: {fileID: 1474189557}
+  gameManager: {fileID: 1315365641}
   resetButton: {fileID: 555491326}
 --- !u!1001 &1727602477
 PrefabInstance:

@@ -28,7 +28,6 @@ public class MediumAIStrategy : IAIStrategy
             
             if (gameManager.CheckForWinner())
             {
-                Debug.Log("There is win situation");
                 move.playedTurn = PlayerMove.None;
                 return move;
             }

@@ -7,7 +7,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Zenject;
 
@@ -15,17 +14,17 @@ namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
-        public PlayerType PlayerXType = PlayerType.Human;
-        public PlayerType PlayerOType = PlayerType.AI;
+        public PlayerType playerXType = PlayerType.Human;
+        public PlayerType playerOType = PlayerType.AI;
         public AIDifficulty difficulty = AIDifficulty.Medium;
 
-        public UnityEvent WinnerFound;
+        public UnityEvent<bool> onGameOver;
         public UnityEvent onMoved;
 
         private BoardModel _boardModel;
 
         public Cell selectedCell;
-        public int moveCount = 0;
+        public int moveCount;
         public GameObject panel;
         public PlayerMove CurrentPlayer { get; set; }
 
@@ -33,9 +32,8 @@ namespace Managers
         private Button[] _buttons;
 
         private const int BoardSize = 3;
-        private const int SlotsCount = 9;
 
-        private IGameState _currentState;
+        public IGameState CurrentGameState;
 
         [Inject] private UIManager _uiManager;
         [SerializeField] private ViewManager viewManager;
@@ -61,27 +59,22 @@ namespace Managers
         private void InitCommands()
         {
             onMoved.AddListener(UpdateGame);
-            WinnerFound.AddListener(OnWinnerFound);
             _uiManager.resetButton.onClick.AddListener(ResetGame);
         }
-
-
+        
         private void Start()
         {
             SetState(new PlayerXTurnState());
-            _uiManager.UpdateStatus($"Player{CurrentPlayer}'s turn!");
+            _uiManager.UpdateStatusText(CurrentPlayer);
         }
 
         public void SetState(IGameState newState)
         {
-            _currentState?.ExitState(this);
-            _currentState = newState;
-            _currentState.EnterState(this);
+            CurrentGameState?.ExitState(this);
+            CurrentGameState = newState;
+            CurrentGameState.EnterState(this);
         }
-
-
         
-
         private void GetButtonBoard()
         {
             _buttons = new Button[9];
@@ -93,13 +86,9 @@ namespace Managers
 
                 _buttons[i] = button;
                 _slots[i / BoardSize, i % BoardSize] = button.GetComponent<Cell>();
-                var cell = _slots[i / BoardSize, i % BoardSize];
-                Debug.Log(cell.row + " " + cell.column);
             }
         }
-
         
-
         private void RemoveCommands()
         {
             onMoved.RemoveListener(UpdateGame);
@@ -113,19 +102,8 @@ namespace Managers
             UpdateBoard();
             UpdateGameState();
             UpdateMovesCount();
-            UpdateStatusText();
         }
-
-        private void UpdateStatusText()
-        {
-            if (_currentState is GameOverState)
-                _uiManager.UpdateStatus($"{selectedCell.playedTurn} Won!");
-            else if (moveCount >= SlotsCount)
-                _uiManager.UpdateStatus("Draw!");
-            else
-                _uiManager.UpdateStatus($"Player {CurrentPlayer}");
-        }
-
+        
         private void UpdateBoard()
         {
             var row = selectedCell.row;
@@ -134,13 +112,13 @@ namespace Managers
             _slots = _boardModel.GetBoard();
         }
 
-        private void UpdateGameState() => _currentState.UpdateState(this);
+        private void UpdateGameState() => CurrentGameState.UpdateState(this);
 
         private void UpdateMovesCount() => moveCount++;
 
         public bool CheckForWinner() => GetWinningCells() != null;
 
-        public List<Cell> GetWinningCells()
+        private List<Cell> GetWinningCells()
         {
             // Rows
             for (int i = 0; i < BoardSize; i++)
@@ -192,7 +170,7 @@ namespace Managers
             ResetCells();
             selectedCell = null;
             SetState(new PlayerXTurnState());
-            UpdateStatusText();
+            _uiManager.UpdateStatusText(CurrentPlayer);
             lineRendererController.EraseLine();
         }
 
@@ -212,7 +190,6 @@ namespace Managers
             var availableMoves = new List<Cell>();
             foreach (var cell in _slots)
             {
-                Debug.Log(cell);
                 if (cell.playedTurn == PlayerMove.None)
                 {
                     availableMoves.Add(cell);
@@ -235,24 +212,30 @@ namespace Managers
 
         public void MakeMoveWithDelay(Cell cell, float delaySeconds)
         {
-            UpdateStatusText();
+            _uiManager.UpdateStatusText(CurrentPlayer);
             StartCoroutine(DelayMove(cell, delaySeconds));
         }
 
         private void OnWinnerFound()
+        { 
+            // TODO
+            
+            // send this to LineRenderer controller
+            // var winningCells = GetWinningCells();
+            // if (winningCells.Count == 3)
+            // {
+            //     lineRendererController.SetCompleteLine(
+            //         winningCells[0].transform.position, 
+            //         winningCells[2].transform.position);
+            //
+            //     var color = CurrentPlayer.Equals(PlayerMove.X) ? playerXColor : playerOColor;
+            //     lineRendererController.ColorLine(color);
+            // }
+        }
+
+        public void NotifyGameOver(bool isDraw)
         {
-            var winningCells = GetWinningCells();
-            Debug.Log(winningCells.Count);
-            if (winningCells != null)
-            {
-                lineRendererController.SetCompleteLine(
-                    winningCells[0].transform.position, 
-                    winningCells[2].transform.position);
-
-                var color = CurrentPlayer.Equals(PlayerMove.X) ? playerXColor : playerOColor;
-                lineRendererController.ColorLine(color);
-            }
-
+            onGameOver.Invoke(isDraw);
         }
 
         

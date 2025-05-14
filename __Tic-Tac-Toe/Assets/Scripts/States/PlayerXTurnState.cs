@@ -12,10 +12,10 @@ namespace States
 
         public void EnterState(GameManager gameManager)
         {
-            Debug.Log("Player X's Turn");
+            
             gameManager.CurrentPlayer = PlayerMove.X;
 
-            if (gameManager.PlayerXType == PlayerType.AI)
+            if (gameManager.playerXType == PlayerType.AI)
             {
                 _aiPlayer = new AIPlayer(gameManager.difficulty);
                 var chosenCell = _aiPlayer.MakeMove(gameManager);
@@ -29,7 +29,6 @@ namespace States
 
         public void UpdateState(GameManager gameManager)
         {
-            Debug.Log(gameManager.CheckForWinner());
             if (gameManager.CheckForWinner() || gameManager.moveCount >= 9)
                 gameManager.SetState(new GameOverState());
             else

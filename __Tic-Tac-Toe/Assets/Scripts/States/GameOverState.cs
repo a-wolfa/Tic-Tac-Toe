@@ -9,9 +9,9 @@ namespace States
     {
         public void EnterState(GameManager gameManager)
         {
-            Debug.Log("Game is Actually Over");
-            if (gameManager.CheckForWinner())
-                gameManager.WinnerFound.Invoke();
+            Debug.Log(gameManager.CurrentPlayer);
+            
+            gameManager.NotifyGameOver(!gameManager.CheckForWinner());
         }
 
         public void UpdateState(GameManager gameManager)

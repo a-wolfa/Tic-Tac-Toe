@@ -5,7 +5,7 @@ namespace Model
 {
     public class BoardModel
     {
-        private Cell[,] _cBoard = new Cell[3, 3];
+        private Cell[,] _cBoard;
 
         public BoardModel(Cell[,] slots)
         {
@@ -15,7 +15,6 @@ namespace Model
         public void SetCell(int row, int column, Cell selectedCell)
         {
             _cBoard[row, column] = selectedCell;
-            Debug.Log(selectedCell.playedTurn);
         }
 
         public Cell GetCell(int row, int column)
