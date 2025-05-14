@@ -1,3 +1,4 @@
+using Line;
 using Managers;
 using UnityEngine;
 using Zenject;
@@ -6,13 +7,11 @@ namespace Installers
 {
     public class TInstaller : MonoInstaller
     {
-        [SerializeField] private GameManager gameManager;
-        [SerializeField] private UIManager uiManager;
         public override void InstallBindings()
         {
-            Container.Bind<GameManager>().FromInstance(gameManager).AsSingle().NonLazy();
-            Container.Bind<UIManager>().FromInstance(uiManager).AsSingle().NonLazy();
-            
+            Container.Bind<GameManager>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<UIManager>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<LineRenderer>().FromComponentInHierarchy().AsSingle();
             // Bind other dependencies here
         }
     }

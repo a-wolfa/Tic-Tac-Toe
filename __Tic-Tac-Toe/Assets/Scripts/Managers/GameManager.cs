@@ -17,13 +17,12 @@ namespace Managers
     {
         public PlayerType PlayerXType = PlayerType.Human;
         public PlayerType PlayerOType = PlayerType.AI;
+        public AIDifficulty difficulty = AIDifficulty.Medium;
 
         public UnityEvent WinnerFound;
-
-        public AIDifficulty difficulty;
+        public UnityEvent onMoved;
 
         private BoardModel _boardModel;
-        public UnityEvent onMoved;
 
         public Cell selectedCell;
         public int moveCount = 0;
@@ -38,9 +37,7 @@ namespace Managers
 
         private IGameState _currentState;
 
-        [Inject]
-        private UIManager _uiManager;
-
+        [Inject] private UIManager _uiManager;
         [SerializeField] private ViewManager viewManager;
         [SerializeField] private LineRendererController lineRendererController;
 
@@ -51,6 +48,23 @@ namespace Managers
         {
             Init();
         }
+
+        private void Init()
+        {
+            _slots = new Cell[BoardSize, BoardSize];
+            _boardModel = new BoardModel(_slots);
+
+            InitCommands();
+            GetButtonBoard();
+        }
+
+        private void InitCommands()
+        {
+            onMoved.AddListener(UpdateGame);
+            WinnerFound.AddListener(OnWinnerFound);
+            _uiManager.resetButton.onClick.AddListener(ResetGame);
+        }
+
 
         private void Start()
         {
@@ -66,14 +80,7 @@ namespace Managers
         }
 
 
-        private void Init()
-        {
-            _slots = new Cell[BoardSize, BoardSize];
-            _boardModel = new BoardModel(_slots);
-
-            InitCommands();
-            GetButtonBoard();
-        }
+        
 
         private void GetButtonBoard()
         {
@@ -91,12 +98,7 @@ namespace Managers
             }
         }
 
-        private void InitCommands()
-        {
-            onMoved.AddListener(UpdateGame);
-            WinnerFound.AddListener(OnWinnerFound);
-            _uiManager.resetButton.onClick.AddListener(ResetGame);
-        }
+        
 
         private void RemoveCommands()
         {
@@ -104,10 +106,7 @@ namespace Managers
             _uiManager.resetButton.onClick.RemoveListener(ResetGame);
         }
 
-        private void OnDestroy()
-        {
-            RemoveCommands();
-        }
+        private void OnDestroy() => RemoveCommands();
 
         private void UpdateGame()
         {
@@ -135,20 +134,11 @@ namespace Managers
             _slots = _boardModel.GetBoard();
         }
 
-        private void UpdateGameState()
-        {
-            _currentState.UpdateState(this);
-        }
+        private void UpdateGameState() => _currentState.UpdateState(this);
 
-        private void UpdateMovesCount()
-        {
-            moveCount++;
-        }
+        private void UpdateMovesCount() => moveCount++;
 
-        public bool CheckForWinner()
-        {
-            return GetWinningCells() != null;
-        }
+        public bool CheckForWinner() => GetWinningCells() != null;
 
         public List<Cell> GetWinningCells()
         {
@@ -197,11 +187,8 @@ namespace Managers
 
         private void ResetGame()
         {
-            if (moveCount <= 0)
-                return;
-
+            if (moveCount <= 0) return;
             moveCount = 0;
-
             ResetCells();
             selectedCell = null;
             SetState(new PlayerXTurnState());
@@ -222,7 +209,7 @@ namespace Managers
 
         public List<Cell> GetAvailableMoves()
         {
-            List<Cell> availableMoves = new List<Cell>();
+            var availableMoves = new List<Cell>();
             foreach (var cell in _slots)
             {
                 Debug.Log(cell);
@@ -258,7 +245,9 @@ namespace Managers
             Debug.Log(winningCells.Count);
             if (winningCells != null)
             {
-                lineRendererController.SetCompleteLine(winningCells[0].transform.position, winningCells[2].transform.position);
+                lineRendererController.SetCompleteLine(
+                    winningCells[0].transform.position, 
+                    winningCells[2].transform.position);
 
                 var color = CurrentPlayer.Equals(PlayerMove.X) ? playerXColor : playerOColor;
                 lineRendererController.ColorLine(color);

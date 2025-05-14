@@ -1,19 +1,25 @@
 using DG.Tweening;
 using System;
 using UnityEngine;
+using Zenject;
 
 namespace Line
 {
     public class LineRendererController : MonoBehaviour
     {
-        private LineRenderer _lineRenderer;
+        [Inject] private LineRenderer _lineRenderer;
         [SerializeField] private float extensionLength = 0.5f;
 
         private void Awake()
         {
-            _lineRenderer = GetComponent<LineRenderer>();
+            Init();
+        }
+
+        private void Init()
+        {
             _lineRenderer.positionCount = 2;
         }
+
 
         public void SetCompleteLine(Vector3 start, Vector3 end)
         {

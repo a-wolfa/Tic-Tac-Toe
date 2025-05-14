@@ -1,3 +1,4 @@
+using Assets.Scripts.AI;
 using Managers;
 using Model;
 using States.Abstraction;
@@ -7,9 +8,10 @@ namespace States
 {
     public class PlayerOTurnState : IGameState
     {
+        float delay = 0.7f;
+
         public void EnterState(GameManager gameManager)
         {
-            Debug.Log("Player O's Turn");
             gameManager.CurrentPlayer = PlayerMove.O;
 
             if (gameManager.PlayerOType == PlayerType.AI)
@@ -18,7 +20,7 @@ namespace States
                 var chosenCell = aiPlayer.MakeMove(gameManager);
                 if (chosenCell != null)
                 {
-                    gameManager.MakeMoveWithDelay(chosenCell, .7f);
+                    gameManager.MakeMoveWithDelay(chosenCell, delay);
                 }
             }
         }
@@ -33,9 +35,6 @@ namespace States
             }
         }
 
-        public void ExitState(GameManager gameManager)
-        {
-            // Clean up or Reset
-        }
+        public void ExitState(GameManager gameManager) { }
     }
 }

@@ -3,23 +3,26 @@ using Managers;
 using Model;
 using UnityEngine;
 
-public class AIPlayer
+namespace Assets.Scripts.AI
 {
-    private readonly IAIStrategy strategy;
-
-    public AIPlayer(AIDifficulty difficulty)
+    public class AIPlayer
     {
-        strategy = difficulty switch
+        private readonly IAIStrategy _strategy;
+
+        public AIPlayer(AIDifficulty difficulty)
         {
-            AIDifficulty.Easy => new EasyAIStrategy(),
-            AIDifficulty.Medium => new MediumAIStrategy(),
-            AIDifficulty.Hard => new HardAIStrategy(),
-            _ => throw new System.ArgumentOutOfRangeException(nameof(difficulty), difficulty, null)
-        };
-    }
+            _strategy = difficulty switch
+            {
+                AIDifficulty.Easy => new EasyAIStrategy(),
+                AIDifficulty.Medium => new MediumAIStrategy(),
+                AIDifficulty.Hard => new HardAIStrategy(),
+                _ => new MediumAIStrategy()
+            };
+        }
 
-    public Cell MakeMove(GameManager gameManager)
-    {
-        return strategy.MakeMove(gameManager);
+        public Cell MakeMove(GameManager gameManager)
+        {
+            return _strategy.MakeMove(gameManager);
+        }
     }
 }
