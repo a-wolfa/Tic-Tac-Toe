@@ -13,7 +13,7 @@ public class MediumAIStrategy : IAIStrategy
         {
             move.playedTurn = gameManager.CurrentPlayer;
 
-            if (gameManager.CheckForWinner())
+            if (gameManager.Board.CheckForWinner())
             {
                 move.playedTurn = PlayerMove.None;
                 return move;
@@ -26,7 +26,7 @@ public class MediumAIStrategy : IAIStrategy
         {
             move.playedTurn = gameManager.CurrentPlayer == PlayerMove.X ? PlayerMove.O : PlayerMove.X;
             
-            if (gameManager.CheckForWinner())
+            if (gameManager.Board.CheckForWinner())
             {
                 move.playedTurn = PlayerMove.None;
                 return move;

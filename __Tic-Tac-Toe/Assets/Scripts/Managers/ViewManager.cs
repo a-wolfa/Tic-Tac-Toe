@@ -1,20 +1,23 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ViewManager : MonoBehaviour
+namespace Managers
 {
-    private void Start()
+    public class ViewManager : MonoBehaviour
     {
-        AddScene("Menu");
-    }
+        private void Start()
+        {
+            AddScene("Menu");
+        }
 
-    public void AddScene(string sceneName)
-    {
-        SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
-    }
+        public void AddScene(string sceneName)
+        {
+            SceneManager.LoadScene("Menu", LoadSceneMode.Additive);
+        }
 
-    public void UnLoadScene(string sceneName)
-    {
-        SceneManager.UnloadSceneAsync(sceneName);
+        public void UnLoadScene(string sceneName)
+        {
+            SceneManager.UnloadSceneAsync(sceneName);
+        }
     }
 }

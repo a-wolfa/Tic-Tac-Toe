@@ -18,7 +18,7 @@ public class HardAIStrategy : IAIStrategy
 
     private (Cell cell, int score) MiniMax(List<Cell> availableMoves, bool isMaximizing, GameManager gameManager)
     {
-        if (gameManager.CheckForWinner())
+        if (gameManager.Board.CheckForWinner())
         {
             return (null, isMaximizing ? -1 : 1);
         }

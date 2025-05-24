@@ -1,42 +1,42 @@
-using Managers;
-using System;
-using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuManager : MonoBehaviour
+namespace Managers
 {
-    [SerializeField] Button vsPlayer;
-    [SerializeField] Button vsAI;
-
-    private GameManager gameManager;
-    private ViewManager viewManager;
-
-    private void Awake()
+    public class MenuManager : MonoBehaviour
     {
-        Init();
-    }
+        [SerializeField] Button vsPlayer;
+        [SerializeField] Button vsAI;
 
-    private void Init()
-    {
-        InitCommands();
-    }
+        private GameManager _gameManager;
+        private ViewManager _viewManager;
 
-    private void InitCommands()
-    {
-        vsPlayer.onClick.AddListener(() => OnPlayerClicked(PlayerType.Human));
-        vsAI.onClick.AddListener(() => OnPlayerClicked(PlayerType.AI));
-    }
+        private void Awake()
+        {
+            Init();
+        }
 
-    private void Start()
-    {
-        gameManager = FindFirstObjectByType<GameManager>();
-        viewManager = FindFirstObjectByType<ViewManager>();
-    }
+        private void Init()
+        {
+            InitCommands();
+        }
 
-    private void OnPlayerClicked(PlayerType playerType)
-    {
-        gameManager.playerOType = playerType;
-        viewManager.UnLoadScene("Menu");
+        private void InitCommands()
+        {
+            vsPlayer.onClick.AddListener(() => OnPlayerClicked(PlayerType.Human));
+            vsAI.onClick.AddListener(() => OnPlayerClicked(PlayerType.AI));
+        }
+
+        private void Start()
+        {
+            _gameManager = FindFirstObjectByType<GameManager>();
+            _viewManager = FindFirstObjectByType<ViewManager>();
+        }
+
+        private void OnPlayerClicked(PlayerType playerType)
+        {
+            _gameManager.playerOType = playerType;
+            _viewManager.UnLoadScene("Menu");
+        }
     }
 }

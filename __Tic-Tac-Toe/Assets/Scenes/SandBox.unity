@@ -1538,6 +1538,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 455f2d51a57cd3745b098124ea37f2fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1208928534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1208928535}
+  - component: {fileID: 1208928536}
+  m_Layer: 0
+  m_Name: Board Presenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1208928535
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208928534}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 597.03406, y: 1758.9697, z: -2.7284663}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1208928536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208928534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f482d0fca22e4bd68d748380cdd068fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1261259448
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1800,6 +1844,7 @@ MonoBehaviour:
   lineRendererController: {fileID: 561991714}
   playerXColor: {r: 0.7960785, g: 0.8980393, b: 0.27058825, a: 1}
   playerOColor: {r: 0.078431375, g: 0.8000001, b: 0.5019608, a: 1}
+  Board: {fileID: 0}
 --- !u!4 &1315365642
 Transform:
   m_ObjectHideFlags: 0
@@ -2201,8 +2246,9 @@ GameObject:
   - component: {fileID: 1798417249}
   - component: {fileID: 1798417251}
   - component: {fileID: 1798417250}
+  - component: {fileID: 1798417252}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Board Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2275,6 +2321,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1798417248}
   m_CullTransparentMesh: 1
+--- !u!114 &1798417252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798417248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49675fdf666745cf9f92c92cd7f5cbe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1934896723
 GameObject:
   m_ObjectHideFlags: 0
@@ -2634,3 +2692,4 @@ SceneRoots:
   - {fileID: 838576416}
   - {fileID: 588637043}
   - {fileID: 713546094}
+  - {fileID: 1208928535}

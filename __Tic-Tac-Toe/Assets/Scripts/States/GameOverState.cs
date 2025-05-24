@@ -11,7 +11,7 @@ namespace States
         {
             Debug.Log(gameManager.CurrentPlayer);
             
-            gameManager.NotifyGameOver(!gameManager.CheckForWinner());
+            gameManager.NotifyGameOver(!gameManager.Board.CheckForWinner());
         }
 
         public void UpdateState(GameManager gameManager)

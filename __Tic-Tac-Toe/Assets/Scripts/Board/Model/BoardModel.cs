@@ -1,7 +1,6 @@
-using System.Linq;
-using UnityEngine;
+using Model;
 
-namespace Model
+namespace Board.Model
 {
     public class BoardModel
     {

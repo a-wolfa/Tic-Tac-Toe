@@ -5,6 +5,10 @@ using States;
 using States.Abstraction;
 using System.Collections;
 using System.Collections.Generic;
+using Board;
+using Board.Model;
+using Board.Presenter;
+using Board.View;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -42,6 +46,8 @@ namespace Managers
         public Color playerXColor;
         public Color playerOColor;
 
+        public BoardPresenter Board;
+
         private void Awake()
         {
             Init();
@@ -51,6 +57,8 @@ namespace Managers
         {
             _slots = new Cell[BoardSize, BoardSize];
             _boardModel = new BoardModel(_slots);
+            
+            Board = new BoardPresenter(_boardModel, new BoardView());
 
             InitCommands();
             GetButtonBoard();
@@ -116,53 +124,6 @@ namespace Managers
 
         private void UpdateMovesCount() => moveCount++;
 
-        public bool CheckForWinner() => GetWinningCells() != null;
-
-        private List<Cell> GetWinningCells()
-        {
-            // Rows
-            for (int i = 0; i < BoardSize; i++)
-            {
-                if (_slots[i, 0].playedTurn != PlayerMove.None &&
-                    _slots[i, 0].playedTurn == _slots[i, 1].playedTurn &&
-                    _slots[i, 1].playedTurn == _slots[i, 2].playedTurn)
-                {
-                    return new List<Cell> { _slots[i, 0], _slots[i, 1], _slots[i, 2] };
-                }
-            }
-
-            // Columns
-            for (int i = 0; i < BoardSize; i++)
-            {
-                if (_slots[0, i].playedTurn != PlayerMove.None &&
-                    _slots[0, i].playedTurn == _slots[1, i].playedTurn &&
-                    _slots[1, i].playedTurn == _slots[2, i].playedTurn)
-                {
-                    return new List<Cell> { _slots[0, i], _slots[1, i], _slots[2, i] };
-                }
-            }
-
-            // Diagonal
-            if (_slots[0, 0].playedTurn != PlayerMove.None &&
-                _slots[0, 0].playedTurn == _slots[1, 1].playedTurn &&
-                _slots[1, 1].playedTurn == _slots[2, 2].playedTurn)
-            {
-                return new List<Cell> { _slots[0, 0], _slots[1, 1], _slots[2, 2] };
-            }
-
-            // Anti-diagonal
-            if (_slots[0, 2].playedTurn != PlayerMove.None &&
-                _slots[0, 2].playedTurn == _slots[1, 1].playedTurn &&
-                _slots[1, 1].playedTurn == _slots[2, 0].playedTurn)
-            {
-                return new List<Cell> { _slots[0, 2], _slots[1, 1], _slots[2, 0] };
-            }
-
-            return null;
-        }
-
-
-
         private void ResetGame()
         {
             if (moveCount <= 0) return;
@@ -214,23 +175,6 @@ namespace Managers
         {
             _uiManager.UpdateStatusText(CurrentPlayer);
             StartCoroutine(DelayMove(cell, delaySeconds));
-        }
-
-        private void OnWinnerFound()
-        { 
-            // TODO
-            
-            // send this to LineRenderer controller
-            // var winningCells = GetWinningCells();
-            // if (winningCells.Count == 3)
-            // {
-            //     lineRendererController.SetCompleteLine(
-            //         winningCells[0].transform.position, 
-            //         winningCells[2].transform.position);
-            //
-            //     var color = CurrentPlayer.Equals(PlayerMove.X) ? playerXColor : playerOColor;
-            //     lineRendererController.ColorLine(color);
-            // }
         }
 
         public void NotifyGameOver(bool isDraw)

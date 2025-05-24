@@ -29,7 +29,7 @@ namespace States
 
         public void UpdateState(GameManager gameManager)
         {
-            if (gameManager.CheckForWinner() || gameManager.moveCount >= 9)
+            if (gameManager.Board.CheckForWinner() || gameManager.moveCount >= 9)
                 gameManager.SetState(new GameOverState());
             else
                 gameManager.SetState(new PlayerOTurnState());
