@@ -10,8 +10,6 @@ namespace States
         public void EnterState(GameManager gameManager)
         {
             Debug.Log(gameManager.CurrentPlayer);
-            
-            gameManager.NotifyGameOver(!gameManager.Board.CheckForWinner());
         }
 
         public void UpdateState(GameManager gameManager)

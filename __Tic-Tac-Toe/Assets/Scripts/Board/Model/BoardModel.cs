@@ -1,34 +1,24 @@
-using Model;
+using Cell.Model;
 
 namespace Board.Model
 {
     public class BoardModel
     {
-        private Cell[,] _cBoard;
+        private CellModel[,] _cellModels;
 
-        public BoardModel(Cell[,] slots)
+        public BoardModel(CellModel[,] cellModels)
         {
-            _cBoard = slots;
+            _cellModels = cellModels;
         }
 
-        public void SetCell(int row, int column, Cell selectedCell)
+        public void SetCell(int row, int column, CellModel selectedCell)
         {
-            _cBoard[row, column] = selectedCell;
-        }
-
-        public Cell GetCell(int row, int column)
-        {
-            return _cBoard[row, column];
+            _cellModels[row, column] = selectedCell;
         }
         
-        public void SetBoard(Cell[,] board)
+        public CellModel[,] GetBoard()
         {
-            _cBoard = board;
-        }
-
-        public Cell[,] GetBoard()
-        {
-            return _cBoard;
+            return _cellModels;
         }
     }
 }

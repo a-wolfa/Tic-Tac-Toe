@@ -1,16 +1,14 @@
-using Board.Abstractions;
+using System;
 using Model;
 using UnityEngine;
 
 namespace Board.View
 {
-    public class BoardView : MonoBehaviour, IBoardView
+    public class BoardView : MonoBehaviour
     {
-        [SerializeField] private Cell[,] _board;
-        
         public void UpdateBoard(int row, int column, PlayerMove move)
         {
-            _board[row, column].playedTurn = move;
+            throw new NotImplementedException();
         }
     }
 }

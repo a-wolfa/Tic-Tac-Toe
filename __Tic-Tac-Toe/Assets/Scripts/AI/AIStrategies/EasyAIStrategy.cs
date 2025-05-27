@@ -1,19 +1,26 @@
 using AI.AIStrategies.Abstractions;
+using Cell.Model;
 using Managers;
-using Model;
-using UnityEngine;
 
-public class EasyAIStrategy : IAIStrategy
+namespace AI.AIStrategies
 {
-    public Cell MakeMove(GameManager gameManager)
+    public class EasyAIStrategy : IAIStrategy
     {
-        var availableMoves = gameManager.GetAvailableMoves();
-        if (availableMoves.Count > 0)
-        {
-            int randomIndex = Random.Range(0, availableMoves.Count);
-            return availableMoves[randomIndex];
-        }
+        // public Cell MakeMove(GameManager gameManager)
+        // {
+        //     var availableMoves = gameManager.GetAvailableMoves();
+        //     if (availableMoves.Count > 0)
+        //     {
+        //         int randomIndex = Random.Range(0, availableMoves.Count);
+        //         return availableMoves[randomIndex];
+        //     }
+        //
+        //     return null;
+        // }
 
-        return null;
+        public CellModel MakeMove(GameManager gameManager)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

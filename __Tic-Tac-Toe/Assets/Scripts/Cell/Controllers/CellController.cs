@@ -1,20 +1,20 @@
-using System;
+using Cell.Model;
 using Managers;
 using Model;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Controllers
+namespace Cell.Controllers
 {
-    public class ButtonController : MonoBehaviour
+    public class CellController : MonoBehaviour
     {
         [SerializeField] private Sprite xSprite;
         [SerializeField] private Sprite oSprite;
 
         [Inject] private GameManager _gameManager;
         private Button _button; 
-        private Cell _cell;
+        private CellModel _cell;
 
         private void Awake()
         {
@@ -30,7 +30,7 @@ namespace Controllers
         private void InitComponents()
         {
             _button = GetComponent<Button>();
-            _cell = GetComponent<Cell>();
+            _cell = GetComponent<CellModel>();
         }
 
         private void InitCommands()
@@ -52,8 +52,8 @@ namespace Controllers
 
         private void Move()
         {
-            _cell.playedTurn = _gameManager.CurrentPlayer;
-            _gameManager.selectedCell = _cell;
+            // _cell.playedTurn = _gameManager.CurrentPlayer;
+            // _gameManager.selectedCell = _cell;
         }
 
         private void UpdateButtonSprite()

@@ -1,16 +1,10 @@
-using UnityEngine;
-
-public class GameResult : MonoBehaviour
+namespace Model
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public enum GameResult
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        OWin,
+        XWin,
+        Draw,
+        InProgress
     }
 }

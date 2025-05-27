@@ -1,3 +1,4 @@
+using Cell.Model;
 using Managers;
 using Model;
 using UnityEngine;
@@ -6,6 +7,6 @@ namespace AI.AIStrategies.Abstractions
 {
     public interface IAIStrategy
     {
-        Cell MakeMove(GameManager gameManager);
+        CellModel MakeMove(GameManager gameManager);
     }
 }

@@ -1,4 +1,6 @@
+using AI.AIStrategies;
 using AI.AIStrategies.Abstractions;
+using Cell.Model;
 using Managers;
 using Model;
 using UnityEngine;
@@ -20,9 +22,9 @@ namespace Assets.Scripts.AI
             };
         }
 
-        public Cell MakeMove(GameManager gameManager)
-        {
-            return _strategy.MakeMove(gameManager);
-        }
+        // public CellModel MakeMove(GameManager gameManager)
+        // {
+        //     return _strategy.MakeMove(gameManager);
+        // }
     }
 }

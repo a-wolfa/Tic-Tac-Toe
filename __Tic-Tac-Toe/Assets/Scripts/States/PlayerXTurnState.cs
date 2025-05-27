@@ -17,22 +17,13 @@ namespace States
 
             if (gameManager.playerXType == PlayerType.AI)
             {
-                _aiPlayer = new AIPlayer(gameManager.difficulty);
-                var chosenCell = _aiPlayer.MakeMove(gameManager);
-
-                if (chosenCell != null)
-                {
-                    gameManager.MakeMoveWithDelay(chosenCell, .7f);
-                }
+                // TODO
             }
         }
 
         public void UpdateState(GameManager gameManager)
         {
-            if (gameManager.Board.CheckForWinner() || gameManager.moveCount >= 9)
-                gameManager.SetState(new GameOverState());
-            else
-                gameManager.SetState(new PlayerOTurnState());
+            // TODO
         }
 
         public void ExitState(GameManager gameManager)

@@ -1,4 +1,5 @@
 using System;
+using Events;
 using Model;
 using States;
 using TMPro;
@@ -10,16 +11,15 @@ namespace Managers
     public class UIManager : MonoBehaviour
     {
         [SerializeField] private TMP_Text statusText;
-        [SerializeField] private GameManager gameManager;
 
         private void OnEnable()
         {
-            gameManager.onGameOver.AddListener(OnGameOverTextUpdate);
+            GameEvents.GameOver.AddListener(OnGameOverTextUpdate);
         }
 
         private void OnDisable()
         {
-            gameManager.onGameOver.RemoveListener(OnGameOverTextUpdate);
+            GameEvents.GameOver.RemoveListener(OnGameOverTextUpdate);
         }
 
         public Button resetButton;
@@ -36,15 +36,19 @@ namespace Managers
             UpdateStatus($"Player {currentPlayer}");
         }
 
-        private void OnGameOverTextUpdate(bool isDraw)
+        private void OnGameOverTextUpdate(GameResult gameResult)
         {
-            if (isDraw)
+            if (gameResult == GameResult.Draw)
             {
                 UpdateStatus("It's a draw!");
             }
-            else
+            else if (gameResult == GameResult.XWin)
             {
-                UpdateStatus($"Player {gameManager.CurrentPlayer} wins!");
+                UpdateStatus($"Player {PlayerMove.X} wins!");
+            }
+            else if (gameResult == GameResult.OWin)
+            {
+                UpdateStatus($"Player {PlayerMove.O} wins!");
             }
         }
     }
