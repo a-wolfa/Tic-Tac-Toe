@@ -9,7 +9,7 @@ namespace States
     {
         public void EnterState(GameManager gameManager)
         {
-            Debug.Log(gameManager.CurrentPlayer);
+            Debug.Log(gameManager.CurrentMove);
         }
 
         public void UpdateState(GameManager gameManager)

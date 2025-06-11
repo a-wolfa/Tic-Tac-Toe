@@ -29,7 +29,7 @@ namespace Managers
         public CellController selectedCell;
         public int moveCount;
         public GameObject panel;
-        public PlayerMove CurrentPlayer { get; set; }
+        public PlayerMove CurrentMove { get; set; }
 
         private CellModel[,] _cellModels;
         private CellController[] _cellControllers;
@@ -58,7 +58,7 @@ namespace Managers
             // TODO
 
             InitCommands();
-            // GetButtonBoard();
+            _gameStateManager.SetState(new PlayerXTurnState(), this);
         }
 
         private void InitCommands()
@@ -97,14 +97,8 @@ namespace Managers
 
         private void UpdateGame()
         {
-            UpdateBoard();
             UpdateGameState();
             UpdateMovesCount();
-        }
-        
-        private void UpdateBoard()
-        {
-            // TODO
         }
 
         private void UpdateGameState()
@@ -121,51 +115,14 @@ namespace Managers
             ResetCells();
             selectedCell = null;
             _gameStateManager.SetState(new PlayerXTurnState(), this);
-            _uiManager.UpdateStatusText(CurrentPlayer);
+            _uiManager.UpdateStatusText(CurrentMove);
             lineRendererController.EraseLine();
         }
 
         private void ResetCells()
         {
-            // foreach (var button in _buttons)
-            // {
-            //     button.interactable = true;
-            //     button.image.sprite = null;
-            //     var cell = button.GetComponent<Cell>();
-            //     cell.playedTurn = PlayerMove.None;
-            // }
+            
         }
-
-        // public List<CellModel> GetAvailableMoves()
-        // {
-        //     // var availableMoves = new List<Cell>();
-        //     // foreach (var cell in _slots)
-        //     // {
-        //     //     if (cell.playedTurn == PlayerMove.None)
-        //     //     {
-        //     //         availableMoves.Add(cell);
-        //     //     }
-        //     // }
-        //     //
-        //     // return availableMoves;
-        // }
-
-        // private void MakeMove(Cell cell)
-        // {
-        //     cell.GetComponent<CellController>().UpdateCell();
-        // }
-
-        // private IEnumerator DelayMove(Cell cell, float delaySeconds)
-        // {
-        //     yield return new WaitForSeconds(delaySeconds);
-        //     MakeMove(cell);
-        // }
-
-        // public void MakeMoveWithDelay(Cell cell, float delaySeconds)
-        // {
-        //     _uiManager.UpdateStatusText(CurrentPlayer);
-        //     StartCoroutine(DelayMove(cell, delaySeconds));
-        // }
 
         public void NotifyGameOver(bool isDraw)
         {

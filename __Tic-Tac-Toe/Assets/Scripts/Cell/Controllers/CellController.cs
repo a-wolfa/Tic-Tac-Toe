@@ -4,17 +4,18 @@ using System;
 using UnityEngine.UI;
 using Cell.View;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using Model;
+using Managers;
+using Unity.VisualScripting;
 
 namespace Cell.Controllers
 {
-    public class CellController : MonoBehaviour
+    public class CellController : MonoBehaviour, IPointerDownHandler
     {
         [SerializeField] private CellModel _model = new(1, 1);
         
         private CellView _view;
-        private Button _cellButton;
-
-        public static UnityEvent<int, int> OnCellSelected;
 
         private void Awake()
         {
@@ -27,27 +28,32 @@ namespace Cell.Controllers
             InitCommands();
         }
 
-        private void InitCommands()
-        {
-            _cellButton?.onClick.AddListener(SelectCell);
-        }
-
         private void InitComponents()
         {
-            _cellButton = GetComponent<Button>();
             _view = GetComponent<CellView>();
         }
 
+        private void InitCommands()
+        {
+            _model.OnCellChanged += _view.UpdateCell;
+        }
 
         private void SelectCell()
         {
-            Debug.Log($"Cell selected: {_model.Row}, {_model.Column}");
-            OnCellSelected?.Invoke(_model.Row, _model.Column);
+            _model.HandleCellChanged(FindAnyObjectByType<GameManager>().CurrentMove);
         }
 
         private void OnValidate()
         {
             name = $"Cell ({_model.Row}, {_model.Column})";
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (_model.PlayerMove != PlayerMove.GameOver)
+                return;
+
+            SelectCell();
         }
     }
 }

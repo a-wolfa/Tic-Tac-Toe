@@ -2,47 +2,21 @@ using System;
 using UnityEngine;
 using Cell.Controllers;
 using UnityEngine.UI;
+using Managers;
+using Model;
 
 namespace Cell.View
 {
     public class CellView : MonoBehaviour
     {
-        private Button _button;
-
-        private void Awake()
-        {
-            Init();
-        }
-
-        private void Init()
-        {
-            InitComponents();
-            InitCommands();
-        }
-        
-        private void InitComponents()
-        {
-            _button = GetComponent<Button>();
-            if (_button == null)
-            {
-                Debug.LogError("Button component not found on CellView.");
-            }
-        }
-
-        private void InitCommands()
-        {
-            _button?.onClick.AddListener(OnCellClicked);
-        }
-
-        private void RemoveCommands()
-        {
-            _button?.onClick.RemoveListener(OnCellClicked);
-        }
+        [SerializeField] private Sprite _xSprite;
+        [SerializeField] private Sprite _oSprite;
         
 
-        private void OnCellClicked()
+        public void UpdateCell(PlayerMove playerMove)
         {
-            Debug.Log("Button clicked: " + gameObject.name);
+            Debug.Log(playerMove);
+            GetComponent<Image>().sprite = playerMove == PlayerMove.X ? _xSprite : _oSprite;
         }
     }
 }

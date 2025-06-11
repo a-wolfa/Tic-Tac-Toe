@@ -9,7 +9,7 @@ namespace States
     {
         public void EnterState(GameManager gameManager)
         {
-            gameManager.CurrentPlayer = PlayerMove.O;
+            gameManager.CurrentMove = PlayerMove.O;
 
             if (gameManager.playerOType == PlayerType.AI)
             {

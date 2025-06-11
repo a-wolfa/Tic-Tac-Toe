@@ -31,7 +31,7 @@ namespace Managers
 
         public void UpdateStatusText(PlayerMove currentPlayer)
         {
-            if (currentPlayer == PlayerMove.None)
+            if (currentPlayer == PlayerMove.GameOver)
                 return;
             UpdateStatus($"Player {currentPlayer}");
         }

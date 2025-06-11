@@ -12,6 +12,8 @@ namespace Installers
             Container.Bind<GameManager>().FromComponentInHierarchy().AsSingle();
             Container.Bind<UIManager>().FromComponentInHierarchy().AsSingle();
             Container.Bind<LineRenderer>().FromComponentInHierarchy().AsSingle();
+
+            Container.Bind<GameStateManager>().AsSingle();
             // Bind other dependencies here
         }
     }
