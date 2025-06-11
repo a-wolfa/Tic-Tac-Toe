@@ -17,7 +17,7 @@ namespace Line
 
         private void Init()
         {
-            _lineRenderer.positionCount = 2;
+//            _lineRenderer.positionCount = 2;
         }
 
 

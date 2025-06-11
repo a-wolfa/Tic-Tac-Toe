@@ -1,24 +1,24 @@
-using Cell.Model;
-using Managers;
-using Model;
 using UnityEngine;
+using Cell.Model;
+using System;
 using UnityEngine.UI;
-using Zenject;
+using Cell.View;
+using UnityEngine.Events;
 
 namespace Cell.Controllers
 {
     public class CellController : MonoBehaviour
     {
-        [SerializeField] private Sprite xSprite;
-        [SerializeField] private Sprite oSprite;
+        [SerializeField] private CellModel _model = new(1, 1);
+        
+        private CellView _view;
+        private Button _cellButton;
 
-        [Inject] private GameManager _gameManager;
-        private Button _button; 
-        private CellModel _cell;
+        public static UnityEvent<int, int> OnCellSelected;
 
         private void Awake()
         {
-            Init();
+            Init();    
         }
 
         private void Init()
@@ -27,43 +27,27 @@ namespace Cell.Controllers
             InitCommands();
         }
 
-        private void InitComponents()
-        {
-            _button = GetComponent<Button>();
-            _cell = GetComponent<CellModel>();
-        }
-
         private void InitCommands()
         {
-            _button.onClick.AddListener(UpdateCell);
+            _cellButton?.onClick.AddListener(SelectCell);
         }
 
-        public void UpdateCell()
+        private void InitComponents()
         {
-            if (_gameManager.CurrentPlayer == PlayerMove.None)
-                return;
-            
-            Move();
-            UpdateButtonSprite();
-            DisableButton();
-            
-            _gameManager.onMoved.Invoke();
+            _cellButton = GetComponent<Button>();
+            _view = GetComponent<CellView>();
         }
 
-        private void Move()
+
+        private void SelectCell()
         {
-            // _cell.playedTurn = _gameManager.CurrentPlayer;
-            // _gameManager.selectedCell = _cell;
+            Debug.Log($"Cell selected: {_model.Row}, {_model.Column}");
+            OnCellSelected?.Invoke(_model.Row, _model.Column);
         }
 
-        private void UpdateButtonSprite()
+        private void OnValidate()
         {
-            _button.image.sprite = _gameManager.CurrentPlayer == PlayerMove.O ? oSprite : xSprite;
-        }
-
-        private void DisableButton()
-        {
-            _button.interactable = false;
+            name = $"Cell ({_model.Row}, {_model.Column})";
         }
     }
 }

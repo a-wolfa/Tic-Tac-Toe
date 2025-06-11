@@ -14,7 +14,7 @@ namespace Managers
 
         private void OnEnable()
         {
-            GameEvents.GameOver.AddListener(OnGameOverTextUpdate);
+//            GameEvents.GameOver.AddListener(OnGameOverTextUpdate);
         }
 
         private void OnDisable()

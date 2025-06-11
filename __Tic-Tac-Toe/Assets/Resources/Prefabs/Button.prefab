@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 6441059940700756444}
   - component: {fileID: 94353976482766965}
   - component: {fileID: 5992615309291409695}
-  - component: {fileID: 6477733088866001325}
-  - component: {fileID: 8103203510268162950}
+  - component: {fileID: 6325761135986231072}
+  - component: {fileID: 6463344164392011130}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Cell (1, 1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6477733088866001325
+--- !u!114 &6325761135986231072
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,9 +134,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2afe32d4b6372ef4a8f0430770043ed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSprite: {fileID: 21300000, guid: f2d33a2dc1716604ba036b3b7cfdf027, type: 3}
-  oSprite: {fileID: 21300000, guid: 7d18f307a26c1874186cab2f220a95b4, type: 3}
---- !u!114 &8103203510268162950
+  _model:
+    Row: 1
+    Column: 1
+--- !u!114 &6463344164392011130
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,9 +146,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4205684195011773615}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79029451e9634ccc970fca6fc5fad496, type: 3}
+  m_Script: {fileID: 11500000, guid: 866cb4551a03435cbab8d784d76eb38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  row: 0
-  column: 0
-  playedTurn: 0

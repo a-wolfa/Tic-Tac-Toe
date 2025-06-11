@@ -64,13 +64,13 @@ namespace Managers
         private void InitCommands()
         {
             onMoved.AddListener(UpdateGame);
-            _uiManager.resetButton.onClick.AddListener(ResetGame);
+//            _uiManager.resetButton.onClick.AddListener(ResetGame);
         }
         
         private void Start()
         {
-            _gameStateManager.SetState(new PlayerXTurnState(), this);
-            _uiManager.UpdateStatusText(CurrentPlayer);
+//            _gameStateManager.SetState(new PlayerXTurnState(), this);
+//            _uiManager.UpdateStatusText(CurrentPlayer);
         }
         
         // private void GetButtonBoard()
