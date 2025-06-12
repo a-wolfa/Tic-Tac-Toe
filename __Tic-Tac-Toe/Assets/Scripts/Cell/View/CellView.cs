@@ -11,12 +11,19 @@ namespace Cell.View
     {
         [SerializeField] private Sprite _xSprite;
         [SerializeField] private Sprite _oSprite;
-        
 
-        public void UpdateCell(PlayerMove playerMove)
+        [SerializeField] private Sprite _empty;
+        
+        public void UpdateCell(PMove playerMove)
         {
-            Debug.Log(playerMove);
-            GetComponent<Image>().sprite = playerMove == PlayerMove.X ? _xSprite : _oSprite;
+            var mark = GetComponent<Image>();
+
+            mark.sprite = playerMove switch
+            {
+                PMove.X => _xSprite,
+                PMove.O => _oSprite,
+                _ => _empty
+            };
         }
     }
 }

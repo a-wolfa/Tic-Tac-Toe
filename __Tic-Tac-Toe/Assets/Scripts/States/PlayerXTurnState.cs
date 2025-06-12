@@ -13,7 +13,7 @@ namespace States
         public void EnterState(GameManager gameManager)
         {
             
-            gameManager.CurrentMove = PlayerMove.X;
+            gameManager.CurrentMove = PMove.X;
 
             if (gameManager.playerXType == PlayerType.AI)
             {

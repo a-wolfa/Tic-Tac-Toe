@@ -29,7 +29,7 @@ namespace Managers
         public CellController selectedCell;
         public int moveCount;
         public GameObject panel;
-        public PlayerMove CurrentMove { get; set; }
+        public PMove CurrentMove { get; set; }
 
         private CellModel[,] _cellModels;
         private CellController[] _cellControllers;

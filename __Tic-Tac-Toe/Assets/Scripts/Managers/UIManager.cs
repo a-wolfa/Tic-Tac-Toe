@@ -12,16 +12,6 @@ namespace Managers
     {
         [SerializeField] private TMP_Text statusText;
 
-        private void OnEnable()
-        {
-//            GameEvents.GameOver.AddListener(OnGameOverTextUpdate);
-        }
-
-        private void OnDisable()
-        {
-            GameEvents.GameOver.RemoveListener(OnGameOverTextUpdate);
-        }
-
         public Button resetButton;
         
         private void UpdateStatus(string message)
@@ -29,9 +19,9 @@ namespace Managers
             statusText.text = message;
         }   
 
-        public void UpdateStatusText(PlayerMove currentPlayer)
+        public void UpdateStatusText(PMove currentPlayer)
         {
-            if (currentPlayer == PlayerMove.GameOver)
+            if (currentPlayer == PMove.None)
                 return;
             UpdateStatus($"Player {currentPlayer}");
         }
@@ -44,11 +34,11 @@ namespace Managers
             }
             else if (gameResult == GameResult.XWin)
             {
-                UpdateStatus($"Player {PlayerMove.X} wins!");
+                UpdateStatus($"Player {PMove.X} wins!");
             }
             else if (gameResult == GameResult.OWin)
             {
-                UpdateStatus($"Player {PlayerMove.O} wins!");
+                UpdateStatus($"Player {PMove.O} wins!");
             }
         }
     }

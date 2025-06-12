@@ -50,10 +50,15 @@ namespace Cell.Controllers
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (_model.PlayerMove != PlayerMove.GameOver)
+            if (_model.Move != PMove.None)
                 return;
 
             SelectCell();
+        }
+
+        public CellModel GetModel()
+        {
+            return _model;
         }
     }
 }

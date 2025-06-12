@@ -9,21 +9,21 @@ namespace Cell.Model
         public int Row;
         public int Column;
 
-        public event Action<PlayerMove> OnCellChanged;
+        public event Action<PMove> OnCellChanged;
 
-        public PlayerMove PlayerMove { get; set; }
+        public PMove Move { get; set; }
         
         public CellModel(int row, int column)
         {
             this.Row = row;
             this.Column = column;
-            this.PlayerMove = PlayerMove.GameOver;
+            this.Move = PMove.None;
         }
 
-        public void HandleCellChanged(PlayerMove cellType)
+        public void HandleCellChanged(PMove cellType)
         {
-            PlayerMove = cellType;
-            OnCellChanged?.Invoke(PlayerMove);
+            Move = cellType;
+            OnCellChanged?.Invoke(Move);
         }
 
     }

@@ -10,6 +10,6 @@ namespace Model
         public int row;
         public int column;
 
-        [FormerlySerializedAs("playedTurn")] public PlayerMove playedTurn;
+        [FormerlySerializedAs("playedTurn")] public PMove playedTurn;
     }
 }

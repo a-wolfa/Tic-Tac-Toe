@@ -92,9 +92,6 @@ MonoBehaviour:
   _model:
     Row: 1
     Column: 1
-  OnCellSelected:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &6463344164392011130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,3 +106,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xSprite: {fileID: 21300000, guid: f2d33a2dc1716604ba036b3b7cfdf027, type: 3}
   _oSprite: {fileID: 21300000, guid: 7d18f307a26c1874186cab2f220a95b4, type: 3}
+  _empty: {fileID: 21300000, guid: 4228df2f8859cd04b957a59acaafebee, type: 3}

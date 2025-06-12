@@ -1,64 +1,81 @@
 using Cell.Controllers;
 using Cell.Model;
 using UnityEngine;
+using Model;
+
 
 namespace Board.Model
 {
     public class BoardModel
     {
-        private readonly int _rows;
-        private readonly int _columns;
-        private CellController[,] _cellControllers;
+        private int _size = 3;
+        private CellModel[,] _cellModels;
 
-        public BoardModel(int rows = 3, int columns = 3)
+        public BoardModel(CellModel[,] cells)
         {
-            _rows = rows;
-            _columns = columns;
-            InitializeBoard();
+            _cellModels = cells;
         }
 
-        private void InitializeBoard()
+        public CellModel GetCell(int row, int column)
         {
-            _cellControllers = new CellController[_rows, _columns];
-        }
-
-        public void InitializeCell(int row, int column, CellController cellController)
-        {
-            if (IsValidPosition(row, column))
-            {
-                _cellControllers[row, column] = cellController;
-            }
-        }
-
-        public void SetCell(int row, int column, CellController selectedCell)
-        {
-            if (IsValidPosition(row, column))
-            {
-                _cellControllers[row, column] = selectedCell;
-            }
-        }
-
-        public CellController GetCell(int row, int column)
-        {
-            return IsValidPosition(row, column) ? _cellControllers[row, column] : null;
+            return IsValidPosition(row, column) ? _cellModels[row, column] : null;
         }
         
-        public CellController[,] GetBoard()
+        public CellModel[,] GetBoard()
         {
-            return _cellControllers;
+            return _cellModels;
         }
 
         public void ResetBoard()
         {
-            InitializeBoard();
+            for (int row = 0; row < _size; row++)
+            {
+                for (int column = 0; column < _size; column++)
+                {
+                    _cellModels[row, column].HandleCellChanged(PMove.None);
+                }
+            }
+
+            Debug.Log("Board reset successfully.");
         }
 
         private bool IsValidPosition(int row, int column)
         {
-            return row >= 0 && row < _rows && column >= 0 && column < _columns;
+            return row >= 0 && row < Size && column >= 0 && column < Size;
         }
 
-        public int Rows => _rows;
-        public int Columns => _columns;
+        public PMove CeckWin()
+        {
+          
+            for (int row = 0; row < _size; row++)
+            {
+                if (IsWinningLine(_cellModels[row, 0], _cellModels[row, 1], _cellModels[row, 2]))
+                    return _cellModels[row, 0].Move;
+            }
+
+            for (int column = 0; column < _size; column++)
+            {
+                if (IsWinningLine(_cellModels[0, column], _cellModels[1, column], _cellModels[2, column]))
+                    return _cellModels[0, column].Move;
+            }
+
+            if (IsWinningLine(_cellModels[0, 0], _cellModels[1, 1], _cellModels[2, 2]))
+                return _cellModels[0, 0].Move;
+
+            if (IsWinningLine(_cellModels[0, 2], _cellModels[1, 1], _cellModels[2, 0]))
+                return _cellModels[0, 2].Move;
+
+            return PMove.None;
+        }
+
+        private bool IsWinningLine(CellModel a, CellModel b, CellModel c)
+        {
+            if (a.Move == PMove.None)
+                return false;
+
+            return a.Move == b.Move && b.Move == c.Move;
+        }
+
+        public int Size => _size;
     }
 }
