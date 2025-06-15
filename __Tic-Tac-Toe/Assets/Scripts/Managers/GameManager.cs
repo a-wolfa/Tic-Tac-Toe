@@ -1,3 +1,4 @@
+using System;
 using Line;
 using Model;
 using States;
@@ -22,12 +23,10 @@ namespace Managers
         public PlayerType playerOType = PlayerType.AI;
         public AIDifficulty difficulty = AIDifficulty.Medium;
 
-        public UnityEvent<bool> onGameOver;
+        public UnityEvent<GameResult> onGameOver;
         public UnityEvent onMoved;
-
-        public CellController selectedCell;
+        
         public int moveCount;
-        public GameObject panel;
         public PMove CurrentMove { get; set; }
 
         [Inject] private UIManager _uiManager;
@@ -39,6 +38,7 @@ namespace Managers
         public Color playerOColor;
 
         public BoardController board;
+        public GameResult gameResult;
 
         private void Awake()
         {
@@ -59,14 +59,24 @@ namespace Managers
         {
             // TODO
             
+            gameResult = GameResult.InProgress;
             InitCommands();
-            
         }
 
         private void InitCommands()
         {
+            onGameOver.AddListener(_uiManager.OnGameOverTextUpdate);
+
             onMoved.AddListener(UpdateGame);
-//            _uiManager.resetButton.onClick.AddListener(ResetGame);
+            onMoved.AddListener(() =>
+            {
+                Debug.Log(gameResult);
+                if (gameResult != GameResult.InProgress)
+                    return;
+                _uiManager.UpdateStatusText(CurrentMove);
+            });
+            
+            _uiManager.resetButton.onClick.AddListener(Reset);
         }
         
         private void Start()
@@ -77,7 +87,9 @@ namespace Managers
         
         private void RemoveCommands()
         {
+            onMoved.RemoveAllListeners();
             
+            onGameOver.RemoveAllListeners();
         }
 
         private void OnDestroy() => RemoveCommands();
@@ -96,16 +108,16 @@ namespace Managers
         private void UpdateMovesCount() => moveCount++;
         
 
-        private void ResetCells()
+        public void NotifyGameOver(GameResult gameResult)
         {
-            
+            onGameOver.Invoke(gameResult);
         }
 
-        public void NotifyGameOver(bool isDraw)
+        private void Reset()
         {
-            onGameOver.Invoke(isDraw);
+            gameResult = GameResult.InProgress;
+            GameStateManager.SetState(GameStateManager.XTurnState, this);
+            moveCount = 0;
         }
-
-        
     }
 }

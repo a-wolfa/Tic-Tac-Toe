@@ -13,7 +13,6 @@ namespace States
 
         public override void EnterState(GameManager gameManager)
         {
-            Debug.Log("Entered Player X Turn State");
             gameManager.CurrentMove = PMove.X;
            
             gameManager.GameStateManager.CurrentGameState = this;
@@ -26,16 +25,14 @@ namespace States
 
         public override void UpdateState(GameManager gameManager)
         {
-            base.UpdateState(gameManager);
-            
-            if (gameManager.selectedCell != null)
+            if (gameManager.board.GetModel().CheckWin() != PMove.None || gameManager.moveCount >= 9)
             {
-                Debug.Log($"Selected cell: {gameManager.selectedCell}");
-                gameManager.moveCount++;
-                gameManager.selectedCell = null;
-                
-                gameManager.GameStateManager.SetState(gameManager.GameStateManager.OTurnState, gameManager);
+                gameManager.GameStateManager.SetState(gameManager.GameStateManager.GameOverState, gameManager);
+                Debug.Log("Game Over State");
             }
+            
+            gameManager.GameStateManager.SetState(gameManager.GameStateManager.OTurnState, gameManager);
+            
         }
 
         public override void ExitState(GameManager gameManager)

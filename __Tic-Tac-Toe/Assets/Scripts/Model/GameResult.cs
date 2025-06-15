@@ -2,9 +2,9 @@ namespace Model
 {
     public enum GameResult
     {
-        OWin,
-        XWin,
+        O,
         Draw,
+        X,
         InProgress
     }
 }

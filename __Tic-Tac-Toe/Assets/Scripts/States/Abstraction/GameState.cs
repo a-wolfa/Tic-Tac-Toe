@@ -8,13 +8,8 @@ namespace States.Abstraction
     {
         public abstract void EnterState(GameManager gameManager);
 
-        public virtual void UpdateState(GameManager gameManager)
-        {
-            if (gameManager.board.GetModel().CheckWin() != PMove.None)
-            {
-                gameManager.GameStateManager.SetState(gameManager.GameStateManager.GameOverState, gameManager);
-            }
-        }
+        public abstract void UpdateState(GameManager gameManager);
+        
         public abstract void ExitState(GameManager gameManager);
     }
 }

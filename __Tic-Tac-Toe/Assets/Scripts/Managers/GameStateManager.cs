@@ -33,7 +33,6 @@ namespace Managers
 
         public void UpdateState(GameManager gameManager)
         {
-            Debug.Log("UpdateState");
             CurrentGameState?.UpdateState(gameManager);
         }
     }

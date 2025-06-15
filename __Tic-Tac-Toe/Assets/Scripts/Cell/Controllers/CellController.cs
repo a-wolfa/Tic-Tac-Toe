@@ -38,10 +38,19 @@ namespace Cell.Controllers
 
         private void InitCommands()
         {
-            _model.OnCellChanged += _view.UpdateCell;
-            _model.OnCellChanged += UpdateSelectedCell;
             _model.OnCellChanged += (pMove) =>
             {
+                if (_gameManager.gameResult != GameResult.InProgress)
+                    return;
+                
+                _view.UpdateCell(pMove);
+            };
+            
+            _model.OnCellChanged += (pMove) =>
+            {
+                if (_gameManager.gameResult != GameResult.InProgress)
+                    return;
+                
                 _gameManager.onMoved.Invoke();
             };
         }
@@ -49,11 +58,6 @@ namespace Cell.Controllers
         private void SelectCell()
         {
             _model.HandleCellChanged(FindAnyObjectByType<GameManager>().CurrentMove);
-        }
-
-        private void UpdateSelectedCell(PMove pMove)
-        {
-            _gameManager.selectedCell = this;
         }
 
         private void OnValidate()
