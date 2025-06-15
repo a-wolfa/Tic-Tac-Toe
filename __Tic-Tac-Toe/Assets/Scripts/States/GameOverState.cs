@@ -5,19 +5,19 @@ using UnityEngine;
 
 namespace States
 {
-    public class GameOverState : IGameState
+    public class GameOverState : GameState
     {
-        public void EnterState(GameManager gameManager)
+        public override void EnterState(GameManager gameManager)
         {
             Debug.Log(gameManager.CurrentMove);
         }
 
-        public void UpdateState(GameManager gameManager)
+        public override void UpdateState(GameManager gameManager)
         {
             // No further update here
         }
 
-        public void ExitState(GameManager gameManager)
+        public override void ExitState(GameManager gameManager)
         {
             // Clean up or reset any necessary variables or states here
         }

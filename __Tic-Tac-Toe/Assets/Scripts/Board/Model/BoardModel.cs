@@ -1,7 +1,6 @@
-using Cell.Controllers;
 using Cell.Model;
-using UnityEngine;
 using Model;
+using UnityEngine;
 
 
 namespace Board.Model
@@ -20,7 +19,7 @@ namespace Board.Model
         {
             return IsValidPosition(row, column) ? _cellModels[row, column] : null;
         }
-        
+
         public CellModel[,] GetBoard()
         {
             return _cellModels;
@@ -44,9 +43,9 @@ namespace Board.Model
             return row >= 0 && row < Size && column >= 0 && column < Size;
         }
 
-        public PMove CeckWin()
+        public PMove CheckWin()
         {
-          
+
             for (int row = 0; row < _size; row++)
             {
                 if (IsWinningLine(_cellModels[row, 0], _cellModels[row, 1], _cellModels[row, 2]))

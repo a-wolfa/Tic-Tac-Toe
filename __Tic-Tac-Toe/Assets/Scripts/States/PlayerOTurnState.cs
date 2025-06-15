@@ -2,14 +2,17 @@ using Assets.Scripts.AI;
 using Managers;
 using Model;
 using States.Abstraction;
+using UnityEngine;
 
 namespace States
 {
-    public class PlayerOTurnState : IGameState
+    public class PlayerOTurnState : GameState
     {
-        public void EnterState(GameManager gameManager)
+
+        public override void EnterState(GameManager gameManager)
         {
             gameManager.CurrentMove = PMove.O;
+            gameManager.GameStateManager.CurrentGameState = this;
 
             if (gameManager.playerOType == PlayerType.AI)
             {
@@ -17,11 +20,18 @@ namespace States
             }
         }
 
-        public void UpdateState(GameManager gameManager)
+        public override void UpdateState(GameManager gameManager)
         {
-            // TODO
+            if (gameManager.selectedCell != null)
+            {
+                Debug.Log($"Selected cell: {gameManager.selectedCell}");
+                gameManager.moveCount++;
+                gameManager.selectedCell = null;
+                
+                gameManager.GameStateManager.SetState(gameManager.GameStateManager.XTurnState, gameManager);
+            }
         }
 
-        public void ExitState(GameManager gameManager) { }
+        public override void ExitState(GameManager gameManager) { }
     }
 }

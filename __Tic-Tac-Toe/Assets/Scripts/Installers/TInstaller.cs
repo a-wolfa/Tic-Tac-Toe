@@ -1,5 +1,6 @@
 using Line;
 using Managers;
+using States;
 using States.Abstraction;
 using UnityEngine;
 using Zenject;
@@ -25,6 +26,9 @@ namespace Installers
 
         public void AddStates()
         {
+            Container.Bind<GameState>().WithId("PlayerX").To<PlayerXTurnState>().AsSingle();
+            Container.Bind<GameState>().WithId("PlayerO").To<PlayerOTurnState>().AsSingle();
+            Container.Bind<GameState>().WithId("GameOver").To<GameOverState>().AsSingle();
         }
     }
 }

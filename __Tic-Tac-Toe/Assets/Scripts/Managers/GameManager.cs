@@ -4,6 +4,7 @@ using States;
 using States.Abstraction;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.AI;
 using Board.Controllers;
 using Board.Model;
 using Cell.Controllers;
@@ -31,26 +32,25 @@ namespace Managers
         public GameObject panel;
         public PMove CurrentMove { get; set; }
 
-        private CellModel[,] _cellModels;
-        private CellController[] _cellControllers;
-
-        private const int BoardSize = 3;
-
-        public IGameState CurrentGameState;
-
         [Inject] private UIManager _uiManager;
-        [Inject] private GameStateManager _gameStateManager;
+        public GameStateManager GameStateManager;
         [SerializeField] private ViewManager viewManager;
         [SerializeField] private LineRendererController lineRendererController;
 
         public Color playerXColor;
         public Color playerOColor;
 
-        public BoardController Board;
+        public BoardController board;
 
         private void Awake()
         {
             Init();
+        }
+        
+        [Inject]
+        public void Construct(GameStateManager gameStateManager)
+        {
+            GameStateManager = gameStateManager;
         }
 
         private void Init()
@@ -58,7 +58,7 @@ namespace Managers
             // TODO
 
             InitCommands();
-            _gameStateManager.SetState(new PlayerXTurnState(), this);
+            
         }
 
         private void InitCommands()
@@ -69,28 +69,13 @@ namespace Managers
         
         private void Start()
         {
-//            _gameStateManager.SetState(new PlayerXTurnState(), this);
 //            _uiManager.UpdateStatusText(CurrentPlayer);
+            GameStateManager.SetState(GameStateManager.XTurnState, this);
         }
-        
-        // private void GetButtonBoard()
-        // {
-        //     _buttons = new Button[9];
-        //     for (int i = 0; i < panel.transform.childCount; i++)
-        //     {
-        //         Button button = panel.transform.GetChild(i).GetComponent<Button>();
-        //         if (!button)
-        //             return;
-        //
-        //         _buttons[i] = button;
-        //         _slots[i / BoardSize, i % BoardSize] = button.GetComponent<Cell>();
-        //     }
-        // }
         
         private void RemoveCommands()
         {
-            onMoved.RemoveListener(UpdateGame);
-            _uiManager.resetButton.onClick.RemoveListener(ResetGame);
+            
         }
 
         private void OnDestroy() => RemoveCommands();
@@ -103,21 +88,11 @@ namespace Managers
 
         private void UpdateGameState()
         {
-            _gameStateManager.UpdateState(this);
+            GameStateManager.UpdateState(this);
         }
 
         private void UpdateMovesCount() => moveCount++;
-
-        private void ResetGame()
-        {
-            if (moveCount <= 0) return;
-            moveCount = 0;
-            ResetCells();
-            selectedCell = null;
-            _gameStateManager.SetState(new PlayerXTurnState(), this);
-            _uiManager.UpdateStatusText(CurrentMove);
-            lineRendererController.EraseLine();
-        }
+        
 
         private void ResetCells()
         {

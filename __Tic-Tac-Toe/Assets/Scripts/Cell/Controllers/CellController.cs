@@ -8,12 +8,15 @@ using UnityEngine.EventSystems;
 using Model;
 using Managers;
 using Unity.VisualScripting;
+using Zenject;
 
 namespace Cell.Controllers
 {
     public class CellController : MonoBehaviour, IPointerDownHandler
     {
         [SerializeField] private CellModel _model = new(1, 1);
+        
+        [Inject] private GameManager _gameManager;
         
         private CellView _view;
 
@@ -36,11 +39,21 @@ namespace Cell.Controllers
         private void InitCommands()
         {
             _model.OnCellChanged += _view.UpdateCell;
+            _model.OnCellChanged += UpdateSelectedCell;
+            _model.OnCellChanged += (pMove) =>
+            {
+                _gameManager.onMoved.Invoke();
+            };
         }
 
         private void SelectCell()
         {
             _model.HandleCellChanged(FindAnyObjectByType<GameManager>().CurrentMove);
+        }
+
+        private void UpdateSelectedCell(PMove pMove)
+        {
+            _gameManager.selectedCell = this;
         }
 
         private void OnValidate()

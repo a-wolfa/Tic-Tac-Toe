@@ -1,19 +1,22 @@
+using System.ComponentModel;
 using Assets.Scripts.AI;
 using Managers;
 using Model;
 using States.Abstraction;
 using UnityEngine;
+using Zenject;
 
 namespace States
 {
-    public class PlayerXTurnState : IGameState
+    public class PlayerXTurnState : GameState
     {
-        private AIPlayer _aiPlayer;
 
-        public void EnterState(GameManager gameManager)
+        public override void EnterState(GameManager gameManager)
         {
-            
+            Debug.Log("Entered Player X Turn State");
             gameManager.CurrentMove = PMove.X;
+           
+            gameManager.GameStateManager.CurrentGameState = this;
 
             if (gameManager.playerXType == PlayerType.AI)
             {
@@ -21,12 +24,20 @@ namespace States
             }
         }
 
-        public void UpdateState(GameManager gameManager)
+        public override void UpdateState(GameManager gameManager)
         {
-            // TODO
+            Debug.Log("Updating Player X Turn State");
+            if (gameManager.selectedCell != null)
+            {
+                Debug.Log($"Selected cell: {gameManager.selectedCell}");
+                gameManager.moveCount++;
+                gameManager.selectedCell = null;
+                
+                gameManager.GameStateManager.SetState(gameManager.GameStateManager.OTurnState, gameManager);
+            }
         }
 
-        public void ExitState(GameManager gameManager)
+        public override void ExitState(GameManager gameManager)
         {
             // Clean up or reset any necessary variables or states here
         }
