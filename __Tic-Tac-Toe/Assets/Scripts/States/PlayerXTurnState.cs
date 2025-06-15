@@ -26,7 +26,8 @@ namespace States
 
         public override void UpdateState(GameManager gameManager)
         {
-            Debug.Log("Updating Player X Turn State");
+            base.UpdateState(gameManager);
+            
             if (gameManager.selectedCell != null)
             {
                 Debug.Log($"Selected cell: {gameManager.selectedCell}");

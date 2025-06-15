@@ -9,7 +9,7 @@ namespace States
     {
         public override void EnterState(GameManager gameManager)
         {
-            Debug.Log(gameManager.CurrentMove);
+            Debug.Log("Game Over State Entered");
         }
 
         public override void UpdateState(GameManager gameManager)

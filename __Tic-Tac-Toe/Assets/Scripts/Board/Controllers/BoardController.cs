@@ -46,5 +46,10 @@ namespace Board.Controllers
         {
             _boardModel.ResetBoard();
         }
+
+        public BoardModel GetModel()
+        {
+            return _boardModel;
+        }
     }
 }

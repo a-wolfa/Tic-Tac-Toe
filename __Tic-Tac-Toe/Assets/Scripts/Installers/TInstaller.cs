@@ -1,3 +1,4 @@
+using Board.Controllers;
 using Line;
 using Managers;
 using States;
@@ -20,6 +21,7 @@ namespace Installers
             Container.Bind<GameManager>().FromComponentInHierarchy().AsSingle();
             Container.Bind<UIManager>().FromComponentInHierarchy().AsSingle();
             Container.Bind<LineRenderer>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<BoardController>().FromComponentInHierarchy().AsSingle();
 
             Container.Bind<GameStateManager>().AsSingle();
         }

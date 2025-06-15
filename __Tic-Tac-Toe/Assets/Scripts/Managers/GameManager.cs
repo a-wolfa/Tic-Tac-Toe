@@ -25,8 +25,6 @@ namespace Managers
         public UnityEvent<bool> onGameOver;
         public UnityEvent onMoved;
 
-        private BoardModel _boardModel;
-
         public CellController selectedCell;
         public int moveCount;
         public GameObject panel;
@@ -48,15 +46,19 @@ namespace Managers
         }
         
         [Inject]
-        public void Construct(GameStateManager gameStateManager)
+        public void Construct(
+            GameStateManager gameStateManager,
+            BoardController boardController
+            )
         {
             GameStateManager = gameStateManager;
+            board = boardController;
         }
 
         private void Init()
         {
             // TODO
-
+            
             InitCommands();
             
         }

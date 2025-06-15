@@ -22,6 +22,8 @@ namespace States
 
         public override void UpdateState(GameManager gameManager)
         {
+            base.UpdateState(gameManager);
+            
             if (gameManager.selectedCell != null)
             {
                 Debug.Log($"Selected cell: {gameManager.selectedCell}");
