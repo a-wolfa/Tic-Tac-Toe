@@ -1,5 +1,6 @@
 using Cell.Model;
 using Model;
+using System;
 using UnityEngine;
 
 
@@ -8,6 +9,7 @@ namespace Board.Model
     public class BoardModel
     {
         private int _size = 3;
+        
         private CellModel[,] _cellModels;
 
         public BoardModel(CellModel[,] cells)

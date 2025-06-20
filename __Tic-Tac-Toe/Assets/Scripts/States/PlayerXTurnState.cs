@@ -14,8 +14,8 @@ namespace States
         public override void EnterState(GameManager gameManager)
         {
             gameManager.CurrentMove = PMove.X;
-           
-            gameManager.GameStateManager.CurrentGameState = this;
+            gameManager.gameStateManager.CurrentGameState = this;
+            gameManager.UpdateStatus();
 
             if (gameManager.playerXType == PlayerType.AI)
             {
@@ -25,14 +25,16 @@ namespace States
 
         public override void UpdateState(GameManager gameManager)
         {
-            if (gameManager.board.GetModel().CheckWin() != PMove.None || gameManager.moveCount >= 9)
+
+            if (gameManager.CheckWin() != PMove.None)
+                gameManager.gameResult = GameResult.X;
+
+            if (gameManager.gameResult != GameResult.InProgress || gameManager.moveCount >= 9)
             {
-                gameManager.GameStateManager.SetState(gameManager.GameStateManager.GameOverState, gameManager);
-                Debug.Log("Game Over State");
+                gameManager.gameStateManager.SetState(new GameOverState(), gameManager);
             }
-            
-            gameManager.GameStateManager.SetState(gameManager.GameStateManager.OTurnState, gameManager);
-            
+
+            gameManager.gameStateManager.SetState(new PlayerOTurnState(), gameManager);
         }
 
         public override void ExitState(GameManager gameManager)

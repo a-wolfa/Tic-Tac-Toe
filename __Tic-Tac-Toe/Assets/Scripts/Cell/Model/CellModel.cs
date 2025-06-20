@@ -1,5 +1,6 @@
 using Model;
 using System;
+using UnityEngine;
 
 namespace Cell.Model
 {
@@ -8,10 +9,10 @@ namespace Cell.Model
     {
         public int Row;
         public int Column;
+        public PMove Move;
 
         public event Action<PMove> OnCellChanged;
 
-        public PMove Move { get; set; }
         
         public CellModel(int row, int column)
         {

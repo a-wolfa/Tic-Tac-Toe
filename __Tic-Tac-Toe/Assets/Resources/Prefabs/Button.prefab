@@ -92,6 +92,7 @@ MonoBehaviour:
   _model:
     Row: 1
     Column: 1
+    Move: 0
 --- !u!114 &6463344164392011130
 MonoBehaviour:
   m_ObjectHideFlags: 0

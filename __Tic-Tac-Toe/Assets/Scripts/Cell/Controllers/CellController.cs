@@ -16,7 +16,7 @@ namespace Cell.Controllers
     {
         [SerializeField] private CellModel _model = new(1, 1);
         
-        [Inject] private GameManager _gameManager;
+        private GameManager _gameManager;
         
         private CellView _view;
 
@@ -34,6 +34,7 @@ namespace Cell.Controllers
         private void InitComponents()
         {
             _view = GetComponent<CellView>();
+            _gameManager = FindFirstObjectByType<GameManager>();
         }
 
         private void InitCommands()
@@ -42,17 +43,19 @@ namespace Cell.Controllers
             {
                 if (_gameManager.gameResult != GameResult.InProgress)
                     return;
-                
+
                 _view.UpdateCell(pMove);
-            };
-            
-            _model.OnCellChanged += (pMove) =>
-            {
-                if (_gameManager.gameResult != GameResult.InProgress)
-                    return;
                 
-                _gameManager.onMoved.Invoke();
+                if (pMove == PMove.None)
+                    return;
+
+                _gameManager.UpdateGame();
             };
+        }
+
+        private void RemoveCommands()
+        {
+            
         }
 
         private void SelectCell()

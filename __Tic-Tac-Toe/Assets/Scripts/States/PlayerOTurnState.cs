@@ -11,9 +11,10 @@ namespace States
 
         public override void EnterState(GameManager gameManager)
         {
+
             gameManager.CurrentMove = PMove.O;
-            
-            gameManager.GameStateManager.CurrentGameState = this;
+            gameManager.gameStateManager.CurrentGameState = this;
+            gameManager.UpdateStatus();
 
             if (gameManager.playerOType == PlayerType.AI)
             {
@@ -23,14 +24,15 @@ namespace States
 
         public override void UpdateState(GameManager gameManager)
         {
-            if (gameManager.board.GetModel().CheckWin() != PMove.None || gameManager.moveCount >= 9)
+            if (gameManager.CheckWin() != PMove.None)
+                gameManager.gameResult = GameResult.O;
+
+            if (gameManager.gameResult != GameResult.InProgress || gameManager.moveCount >= 9)
             {
-                gameManager.GameStateManager.SetState(gameManager.GameStateManager.GameOverState, gameManager);
-                Debug.Log("Game Over State");
+                gameManager.gameStateManager.SetState(new GameOverState(), gameManager);
             }
-            Debug.Log("Switching to X Turn State");
             
-            gameManager.GameStateManager.SetState(gameManager.GameStateManager.XTurnState, gameManager);
+            gameManager.gameStateManager.SetState(new PlayerXTurnState(), gameManager);
         }
 
         public override void ExitState(GameManager gameManager) { }

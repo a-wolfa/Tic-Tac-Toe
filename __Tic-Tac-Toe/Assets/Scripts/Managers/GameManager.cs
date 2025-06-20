@@ -14,110 +14,102 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Zenject;
+using Unity.VisualScripting;
 
 namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
+        [Header("Managers")]
+        [SerializeField] private UIManager _uiManager;
+        [SerializeField] private ViewManager viewManager;
+        [SerializeField] private LineRendererController lineRendererController;
+        [SerializeField] private BoardController board;
+
+        public GameStateManager gameStateManager;
+
+        [Header("Player Settings")]
         public PlayerType playerXType = PlayerType.Human;
         public PlayerType playerOType = PlayerType.AI;
         public AIDifficulty difficulty = AIDifficulty.Medium;
 
-        public UnityEvent<GameResult> onGameOver;
-        public UnityEvent onMoved;
-        
-        public int moveCount;
-        public PMove CurrentMove { get; set; }
-
-        [Inject] private UIManager _uiManager;
-        public GameStateManager GameStateManager;
-        [SerializeField] private ViewManager viewManager;
-        [SerializeField] private LineRendererController lineRendererController;
+        [Header("Game Flow")]
+        public GameResult gameResult;
+        public PMove CurrentMove;
 
         public Color playerXColor;
         public Color playerOColor;
 
-        public BoardController board;
-        public GameResult gameResult;
+        public int moveCount;
 
         private void Awake()
         {
             Init();
         }
-        
-        [Inject]
-        public void Construct(
-            GameStateManager gameStateManager,
-            BoardController boardController
-            )
-        {
-            GameStateManager = gameStateManager;
-            board = boardController;
-        }
 
         private void Init()
         {
-            // TODO
-            
             gameResult = GameResult.InProgress;
+
+            InitComponents();
             InitCommands();
+        }
+
+        private void InitComponents()
+        {
+            gameStateManager = new GameStateManager();
         }
 
         private void InitCommands()
         {
-            onGameOver.AddListener(_uiManager.OnGameOverTextUpdate);
-
-            onMoved.AddListener(UpdateGame);
-            onMoved.AddListener(() =>
-            {
-                Debug.Log(gameResult);
-                if (gameResult != GameResult.InProgress)
-                    return;
-                _uiManager.UpdateStatusText(CurrentMove);
-            });
-            
-            _uiManager.resetButton.onClick.AddListener(Reset);
+            _uiManager.reset.AddListener(Reset);
         }
         
         private void Start()
         {
-//            _uiManager.UpdateStatusText(CurrentPlayer);
-            GameStateManager.SetState(GameStateManager.XTurnState, this);
+            gameStateManager.SetState(new PlayerXTurnState(), this);
         }
-        
+
         private void RemoveCommands()
         {
-            onMoved.RemoveAllListeners();
-            
-            onGameOver.RemoveAllListeners();
+            _uiManager.reset.RemoveAllListeners();
         }
 
         private void OnDestroy() => RemoveCommands();
 
-        private void UpdateGame()
+        public void UpdateGame()
         {
-            UpdateGameState();
             UpdateMovesCount();
+            UpdateGameState();
         }
 
         private void UpdateGameState()
         {
-            GameStateManager.UpdateState(this);
+            gameStateManager.UpdateState(this);
         }
 
-        private void UpdateMovesCount() => moveCount++;
-        
-
-        public void NotifyGameOver(GameResult gameResult)
+        private void UpdateMovesCount()
         {
-            onGameOver.Invoke(gameResult);
+            moveCount++;
         }
 
         private void Reset()
         {
             gameResult = GameResult.InProgress;
-            GameStateManager.SetState(GameStateManager.XTurnState, this);
             moveCount = 0;
+            gameStateManager.SetState(new PlayerXTurnState(), this);
+            board.Reset();
+            UpdateStatus();
+        }
+
+        public void UpdateStatus()
+        {
+            _uiManager.UpdateStatusText(gameResult,CurrentMove);
+        }
+
+        public PMove CheckWin()
+        {
+            return board.GetModel().CheckWin();
         }
     }
 }

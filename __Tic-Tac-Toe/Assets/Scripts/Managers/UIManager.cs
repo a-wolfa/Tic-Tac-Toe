@@ -2,32 +2,59 @@ using System;
 using Model;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
-using Zenject;
 
 namespace Managers
 {
     public class UIManager : MonoBehaviour
     {
         [SerializeField] private TMP_Text statusText;
-        
+
         public Button resetButton;
+        public UnityEvent reset;
 
-        private void UpdateStatus(string message)
+        private void Awake()
         {
-            statusText.text = message;
+            InitCommands();
         }
 
-        public void UpdateStatusText(PMove currentPlayer)
+        private void InitCommands()
         {
-            if (currentPlayer == PMove.None)
-                return;
-            UpdateStatus($"Player {currentPlayer}");
+            resetButton.onClick.AddListener(OnReset);
+        }
+        
+        private void RemoveCommands()
+        {
+            resetButton.onClick.RemoveAllListeners();
         }
 
-        public void OnGameOverTextUpdate(GameResult gameResult)
+        private void OnDestroy()
         {
-            UpdateStatus(gameResult == GameResult.Draw? "It's Draw" : $"{gameResult} Wins!");
+            RemoveCommands();
         }
+
+        private void OnReset()
+        {
+            reset.Invoke();
+        }
+
+        public void UpdateStatusText(GameResult gameResult, PMove currentPlayer)
+        {
+            if (gameResult == GameResult.InProgress)
+            {
+                statusText.text = $"Player {currentPlayer}";
+            }
+            else if (gameResult == GameResult.Draw)
+            {
+                statusText.text = "It's a Draw";
+            }
+            else
+            {
+                statusText.text = $"{gameResult} Wins!";
+            }
+        }
+        
+        
     }
 }
