@@ -51,8 +51,8 @@ namespace Managers
         {
             gameResult = GameResult.InProgress;
 
-            InitComponents();
             InitCommands();
+            InitComponents();
         }
 
         private void InitComponents()
@@ -107,7 +107,7 @@ namespace Managers
             _uiManager.UpdateStatusText(gameResult,CurrentMove);
         }
 
-        public PMove CheckWin()
+        public PMove BoardCheckWin()
         {
             return board.GetModel().CheckWin();
         }

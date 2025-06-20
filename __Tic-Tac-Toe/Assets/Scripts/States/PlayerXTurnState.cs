@@ -26,7 +26,7 @@ namespace States
         public override void UpdateState(GameManager gameManager)
         {
 
-            if (gameManager.CheckWin() != PMove.None)
+            if (gameManager.BoardCheckWin() != PMove.None)
                 gameManager.gameResult = GameResult.X;
 
             if (gameManager.gameResult != GameResult.InProgress || gameManager.moveCount >= 9)

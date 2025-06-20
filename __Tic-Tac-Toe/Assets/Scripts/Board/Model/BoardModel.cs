@@ -36,8 +36,6 @@ namespace Board.Model
                     _cellModels[row, column].HandleCellChanged(PMove.None);
                 }
             }
-
-            Debug.Log("Board reset successfully.");
         }
 
         private bool IsValidPosition(int row, int column)

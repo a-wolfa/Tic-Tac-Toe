@@ -129,7 +129,6 @@ GameObject:
   m_Component:
   - component: {fileID: 18789005}
   - component: {fileID: 18789007}
-  - component: {fileID: 18789006}
   m_Layer: 5
   m_Name: Board
   m_TagString: Untagged
@@ -157,18 +156,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &18789006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 18789004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49675fdf666745cf9f92c92cd7f5cbe7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &18789007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -736,19 +723,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 555491327}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 18789007}
-        m_TargetAssemblyTypeName: Board.Controllers.BoardController, Assembly-CSharp
-        m_MethodName: Reset
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &555491327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1920,24 +1895,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ecc218c95c74748a603a8e1be0a91e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerXType: 0
-  playerOType: 1
-  difficulty: 1
-  gameOver:
-    m_PersistentCalls:
-      m_Calls: []
-  cellSelcted:
-    m_PersistentCalls:
-      m_Calls: []
-  moveCount: 0
-  CurrentMove: 0
   _uiManager: {fileID: 1707894526}
   viewManager: {fileID: 1128338096}
   lineRendererController: {fileID: 561991714}
+  board: {fileID: 18789007}
+  playerXType: 0
+  playerOType: 1
+  difficulty: 1
+  gameResult: 3
+  CurrentMove: 0
   playerXColor: {r: 0.7960785, g: 0.8980393, b: 0.27058825, a: 1}
   playerOColor: {r: 0.078431375, g: 0.8000001, b: 0.5019608, a: 1}
-  board: {fileID: 18789007}
-  gameResult: 3
+  moveCount: 0
 --- !u!4 &1315365642
 Transform:
   m_ObjectHideFlags: 0
