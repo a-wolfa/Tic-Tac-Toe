@@ -1,3 +1,4 @@
+using Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,8 +24,8 @@ namespace Managers
 
         private void InitCommands()
         {
-            vsPlayer.onClick.AddListener(() => OnPlayerClicked(PlayerType.Human));
-            vsAI.onClick.AddListener(() => OnPlayerClicked(PlayerType.AI));
+            vsPlayer.onClick.AddListener(OnPlayerClicked);
+            vsAI.onClick.AddListener(OnPlayerClicked);
         }
 
         private void Start()
@@ -33,9 +34,8 @@ namespace Managers
             _viewManager = FindFirstObjectByType<ViewManager>();
         }
 
-        private void OnPlayerClicked(PlayerType playerType)
+        private void OnPlayerClicked()
         {
-            _gameManager.playerOType = playerType;
             _viewManager.UnLoadScene("Menu");
         }
     }

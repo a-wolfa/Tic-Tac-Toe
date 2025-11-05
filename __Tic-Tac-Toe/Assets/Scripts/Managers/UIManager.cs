@@ -1,4 +1,5 @@
 using System;
+using Core;
 using Model;
 using TMPro;
 using UnityEngine;
@@ -38,23 +39,10 @@ namespace Managers
         {
             reset.Invoke();
         }
-
-        public void UpdateStatusText(GameResult gameResult, PMove currentPlayer)
+        
+        public void UpdateStatusText(string text)
         {
-            if (gameResult == GameResult.InProgress)
-            {
-                statusText.text = $"Player {currentPlayer}";
-            }
-            else if (gameResult == GameResult.Draw)
-            {
-                statusText.text = "It's a Draw";
-            }
-            else
-            {
-                statusText.text = $"{gameResult} Wins!";
-            }
+            statusText.text = text;
         }
-        
-        
     }
 }

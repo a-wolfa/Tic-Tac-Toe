@@ -1,46 +1,24 @@
-using System;
-using Line;
-using Model;
 using States;
-using States.Abstraction;
-using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts.AI;
-using Board.Controllers;
-using Board.Model;
-using Cell.Controllers;
-using Cell.Model;
+using Core;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
-using Zenject;
-using Unity.VisualScripting;
+using View;
 
 namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
         [Header("Managers")]
-        [SerializeField] private UIManager _uiManager;
+        [SerializeField] private UIManager uiManager;
         [SerializeField] private ViewManager viewManager;
-        [SerializeField] private LineRendererController lineRendererController;
-        [SerializeField] private BoardController board;
+        [SerializeField] private CellView[] cellViews;
 
-        public GameStateManager gameStateManager;
-
-        [Header("Player Settings")]
-        public PlayerType playerXType = PlayerType.Human;
-        public PlayerType playerOType = PlayerType.AI;
-        public AIDifficulty difficulty = AIDifficulty.Medium;
+        public GameStateManager GameStateManager;
+        public Board board;
+        private int _moveCount = 0;
 
         [Header("Game Flow")]
-        public GameResult gameResult;
-        public PMove CurrentMove;
-
-        public Color playerXColor;
-        public Color playerOColor;
-
-        public int moveCount;
+        public PlayerType result;
+        public PlayerType currentPlayer;
 
         private void Awake()
         {
@@ -49,67 +27,90 @@ namespace Managers
 
         private void Init()
         {
-            gameResult = GameResult.InProgress;
-
-            InitCommands();
             InitComponents();
+            InitBoard();
+        }
+
+        private void InitBoard()
+        {
+            board = new Board();
+            for (int iterator = 0; iterator < 9; iterator++)
+            {
+                var i = iterator / 3;
+                var j = iterator % 3;
+                board[i, j] = cellViews[iterator].Cell;
+            }
         }
 
         private void InitComponents()
         {
-            gameStateManager = new GameStateManager();
-        }
-
-        private void InitCommands()
-        {
-            _uiManager.reset.AddListener(Reset);
+            currentPlayer = PlayerType.None;
+            GameStateManager = new GameStateManager();
         }
         
         private void Start()
         {
-            gameStateManager.SetState(new PlayerXTurnState(), this);
+            GameStateManager.SetState(new XTurnState(), this);
         }
 
         private void RemoveCommands()
         {
-            _uiManager.reset.RemoveAllListeners();
+            uiManager.reset.RemoveAllListeners();
         }
 
         private void OnDestroy() => RemoveCommands();
 
-        public void UpdateGame()
+        public void UpdateStatus(string text)
         {
-            UpdateMovesCount();
-            UpdateGameState();
+            uiManager.UpdateStatusText(text);
         }
 
-        private void UpdateGameState()
+        public void SetActivePlayer(PlayerType player)
         {
-            gameStateManager.UpdateState(this);
+            currentPlayer = player;
         }
 
-        private void UpdateMovesCount()
+        public PlayerType GetActivePlayer()
         {
-            moveCount++;
+            return currentPlayer;
         }
 
-        private void Reset()
+        public void ChangeState()
         {
-            gameResult = GameResult.InProgress;
-            moveCount = 0;
-            gameStateManager.SetState(new PlayerXTurnState(), this);
-            board.Reset();
-            UpdateStatus();
+            bool isThereAWinner = board.CheckWinner() != PlayerType.None;
+
+            if (++_moveCount >= 9 && !isThereAWinner)
+            {
+                UpdateStatus($"It's a Draw!");
+                return;
+            }
+            
+            if (isThereAWinner)
+            {
+                var winner = board.CheckWinner();
+                UpdateStatus($"{winner} Wins!");
+                
+                return;
+            }
+            
+            if (currentPlayer == PlayerType.X)
+            {
+                GameStateManager.SetState(new OTurnState(), this);
+            }
+            else if (currentPlayer == PlayerType.O)
+            {
+                GameStateManager.SetState(new XTurnState(), this);
+            }
+            
+            UpdateStatus(currentPlayer == PlayerType.X? "Player X" : "Player O");
         }
 
-        public void UpdateStatus()
+        public void DisableBoard()
         {
-            _uiManager.UpdateStatusText(gameResult,CurrentMove);
-        }
-
-        public PMove BoardCheckWin()
-        {
-            return board.GetModel().CheckWin();
+            foreach (var cellView in cellViews)
+            {
+                cellView.SetInteraction(false);
+            }
         }
     }
 }

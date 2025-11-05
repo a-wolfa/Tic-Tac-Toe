@@ -1,7 +1,4 @@
-using States;
 using States.Abstraction;
-using UnityEngine;
-using Zenject;
 
 namespace Managers
 {
@@ -14,11 +11,6 @@ namespace Managers
             CurrentGameState?.ExitState(gameManager);
             CurrentGameState = newState;
             CurrentGameState.EnterState(gameManager);
-        }
-
-        public void UpdateState(GameManager gameManager)
-        {
-            CurrentGameState?.UpdateState(gameManager);
         }
     }
 }
